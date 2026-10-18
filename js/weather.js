@@ -69,16 +69,15 @@
             byId("weatherCondition").textContent = condition.text;
             byId("weatherIcon").textContent = condition.icon;
 
-            showUpdatedTime(new Date());
+            // The updated-time label is intentionally not displayed.
             hasSuccessfulData = true;
         } catch (error) {
             console.warn("Weather refresh failed:", error);
             // Preserve the last valid readings if a later refresh fails.
             if (!hasSuccessfulData) {
                 byId("weatherCondition").textContent = "Weather unavailable";
-                byId("weatherUpdated").textContent = "Check internet connection";
                 byId("weatherIcon").textContent = "🌡️";
-            }
+        }
         } finally {
             isLoading = false;
         }

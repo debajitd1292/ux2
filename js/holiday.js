@@ -154,7 +154,7 @@ function calcHoliday(){
 
         // Find nearest GH
 
-        if(h.type === "GH"){
+        if (String(h.type || "").trim().toUpperCase() === "GH") {
 
             if(!nextGH || hd < nextGH.dateObj){
 
@@ -169,7 +169,7 @@ function calcHoliday(){
 
         // Find nearest RH
 
-        if(h.type === "RH"){
+        if (String(h.type || "").trim().toUpperCase() === "RH") {
 
             if(!nextRH || hd < nextRH.dateObj){
 
@@ -184,32 +184,49 @@ function calcHoliday(){
     });
 
 
-    const ghElem =
-        document.getElementById("nextGH");
+    const ghElem = document.getElementById("nextGH");
+const rhElem = document.getElementById("nextRH");
+const ghNameElem = document.getElementById("nextGHName");
+const rhNameElem = document.getElementById("nextRHName");
 
-    const rhElem =
-        document.getElementById("nextRH");
+function formatNextHolidayDate(dateStr) {
+    if (!dateStr) return "—";
 
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
 
-    if(ghElem){
+    const day = parts[0].padStart(2, "0");
+    const month = parseInt(parts[1], 10);
+    const year = parts[2];
 
-    ghElem.innerText =
-        nextGH
-            ? formatHolidayDate(nextGH.date) +
-              (nextGH.name ? " (" + nextGH.name + ")" : "")
-            : "—";
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
 
-    }
+    if (month < 1 || month > 12) return dateStr;
 
+    return `${day}-${months[month - 1]}-${year}`;
+}
 
-    if(rhElem){
+if (ghElem) {
+    ghElem.textContent = nextGH
+        ? formatNextHolidayDate(nextGH.date)
+        : "No upcoming GH";
+}
 
-    rhElem.innerText =
-        nextRH
-            ? formatHolidayDate(nextRH.date) +
-              (nextRH.name ? " (" + nextRH.name + ")" : "")
-            : "—";
+if (rhElem) {
+    rhElem.textContent = nextRH
+        ? formatNextHolidayDate(nextRH.date)
+        : "No upcoming RH";
+}
 
-    }
+if (ghNameElem) {
+    ghNameElem.textContent = nextGH?.name || "";
+}
+
+if (rhNameElem) {
+    rhNameElem.textContent = nextRH?.name || "";
+}
 
 }
