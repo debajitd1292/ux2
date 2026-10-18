@@ -60,25 +60,35 @@
 
     <article class="summary-card weather-card" id="weatherCard" aria-label="Current weather">
         <div class="weather-card-top">
-            <div class="summary-eyebrow">WEATHER</div>
-            <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
-        </div>
-        <div class="weather-location">Dibrugarh, Assam</div>
-        <div id="weatherTemperature" class="weather-temperature">--°C</div>
-        <div id="weatherCondition" class="weather-condition">Loading weather…</div>
-        <div class="weather-details">
-            <span>Feels like <strong id="weatherFeelsLike">--°C</strong></span>
-            <span class="weather-detail-separator" aria-hidden="true"></span>
-            <span>Humidity <strong id="weatherHumidity">--%</strong></span>
-        </div>
-        <div id="weatherUpdated" class="weather-updated" aria-live="polite"></div>
+    <div class="summary-eyebrow">DIBRUGARH WEATHER</div>
+    <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
+</div>
+
+<div class="weather-main-line">
+    <div id="weatherTemperature" class="weather-temperature">--°C</div>
+    <div id="weatherCondition" class="weather-condition">Loading weather…</div>
+</div>
+
+<div class="weather-details">
+    <span>Feels like <strong id="weatherFeelsLike">--°C</strong></span>
+    <span class="weather-detail-separator" aria-hidden="true"></span>
+    <span>Humidity <strong id="weatherHumidity">--%</strong></span>
+</div>
     </article>
 </section>
 
-<div class="holiday-text holiday-strip">
-    <span>Next GH: <strong id="nextGH">—</strong></span>
-    <span class="holiday-separator" aria-hidden="true">•</span>
-    <span>Next RH: <strong id="nextRH">—</strong></span>
+<div class="next-holidays-grid">
+    <article class="next-holiday-card">
+        <div class="next-holiday-title">Next GH</div>
+        <div id="nextGH" class="next-holiday-date">—</div>
+        <div id="nextGHName" class="next-holiday-name"></div>
+    </article>
+
+    <article class="next-holiday-card">
+        <div class="next-holiday-title">Next RH</div>
+        <div id="nextRH" class="next-holiday-date">—</div>
+        <div id="nextRHName" class="next-holiday-name"></div>
+    </article>
 </div>
 
 <div id="alertSection" class="alert-section" style="margin:10px;"></div>
