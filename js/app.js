@@ -103,6 +103,42 @@ function updatePresentShiftIncharge(){
  * 03. INITIALIZATION AND CURRENT SHIFT DISPLAY
  * ========================================================================== */
 
+function loadDibrugarhWeather() {
+    const weatherCodes = {
+        0: ["Clear sky", "☀"], 1: ["Mainly clear", "🌤"], 2: ["Partly cloudy", "⛅"],
+        3: ["Overcast", "☁"], 45: ["Fog", "≋"], 48: ["Depositing rime fog", "≋"],
+        51: ["Light drizzle", "🌦"], 53: ["Drizzle", "🌦"], 55: ["Heavy drizzle", "🌧"],
+        61: ["Light rain", "🌦"], 63: ["Rain", "🌧"], 65: ["Heavy rain", "🌧"],
+        80: ["Rain showers", "🌦"], 81: ["Showers", "🌧"], 82: ["Heavy showers", "🌧"],
+        95: ["Thunderstorm", "⛈"], 96: ["Thunderstorm with hail", "⛈"], 99: ["Thunderstorm with hail", "⛈"]
+    };
+    const temp = document.getElementById("weatherTemp");
+    const condition = document.getElementById("weatherCondition");
+    const icon = document.getElementById("weatherIcon");
+    const details = document.getElementById("weatherDetails");
+    if (!temp || !condition || !icon || !details) return;
+
+    // Dibrugarh–Lepetkata area. Weather is independent of CSV loading.
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=27.48&longitude=94.93&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FKolkata", { cache: "no-store" })
+        .then(response => { if (!response.ok) throw new Error("Weather service unavailable"); return response.json(); })
+        .then(data => {
+            const current = data.current || {};
+            const [label, symbol] = weatherCodes[current.weather_code] || ["Weather update", "☁"];
+            temp.textContent = Number.isFinite(current.temperature_2m) ? `${Math.round(current.temperature_2m)}°C` : "—°C";
+            condition.textContent = label;
+            icon.textContent = symbol;
+            const humidity = Number.isFinite(current.relative_humidity_2m) ? `Humidity ${current.relative_humidity_2m}%` : "";
+            const feels = Number.isFinite(current.apparent_temperature) ? `Feels like ${Math.round(current.apparent_temperature)}°C` : "";
+            details.textContent = ["Dibrugarh", feels, humidity].filter(Boolean).join(" · ");
+        })
+        .catch(() => {
+            temp.textContent = "—°C";
+            condition.textContent = "Weather unavailable";
+            icon.textContent = "☁";
+            details.textContent = "Dibrugarh · Check connection";
+        });
+}
+
 function init(){
 
     initTheme();
@@ -133,7 +169,6 @@ function init(){
     document.getElementById("todayNote").innerHTML = getTodayNote();
 
     renderAlerts();
-    loadDibrugarhWeather();
     updateTrainingHeader();
     renderTraining();
 
@@ -157,68 +192,34 @@ function refresh(){
     `Today's Shift (${monthNames[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year})`;
 
     const badge = document.getElementById("todayShiftBadge");
-    const shiftCode = String(shift || "-").trim().toUpperCase();
+    const timing = document.getElementById("todayShiftTime");
+    const normalizedShift = (shift || "-").trim().toUpperCase();
     const shiftTimes = {
-        "A": "06:00–14:00", "B": "14:00–22:00", "C": "22:00–06:00",
-        "G": "08:30–17:00", "AB": "06:00–22:00", "BC": "22:00–06:00"
+        "A": "06:00–14:00",
+        "B": "14:00–22:00",
+        "C": "22:00–06:00",
+        "G": "08:30–17:00",
+        "AB": "06:00–22:00",
+        "BC": "22:00–06:00"
     };
-    const validShift = Boolean(selectedName) && shiftCode !== "-" && shiftCode !== "SELECT NAME";
-    const displayCode = validShift ? shiftCode : "—";
-    const timeText = validShift && shiftTimes[shiftCode] ? shiftTimes[shiftCode] : "";
 
-    badge.className = "today-shift-row";
-    badge.innerHTML = `
-        <span class="today-shift-label"><span class="today-shift-clock" aria-hidden="true">◷</span> Today's Shift:</span>
-        <span class="today-shift-code ${validShift ? shiftCode : 'shift-unavailable'}">${displayCode}</span>
-        ${timeText ? `<span class="today-shift-time">${timeText}</span>` : ""}
-    `;
+    badge.className = "badge";
+    if (!selectedName || normalizedShift === "SELECT NAME" || normalizedShift === "-") {
+        badge.innerText = "—";
+        timing.innerText = selectedName ? "Shift not available" : "Select a name to view shift timing";
+    } else {
+        badge.innerText = normalizedShift;
+        timing.innerText = shiftTimes[normalizedShift] || "Timing not defined";
+        const styleClass = ["A", "B", "C", "G", "OFF", "L", "T", "AB", "BC"].includes(normalizedShift)
+            ? normalizedShift : "OTHER";
+        badge.classList.add(styleClass);
+    }
 
     render("today", today);
 
     updatePresentShiftIncharge();
 
     renderProductionPlan();
-}
-
-/* ==========================================================================
- * 03A. DIBRUGARH WEATHER — independent, non-blocking request
- * ========================================================================== */
-
-async function loadDibrugarhWeather(){
-    const temperature = document.getElementById("weatherTemperature");
-    const condition = document.getElementById("weatherCondition");
-    const icon = document.getElementById("weatherIcon");
-    if(!temperature || !condition || !icon) return;
-
-    const weatherLabels = {
-        0:["Clear sky","☀"], 1:["Mainly clear","🌤"], 2:["Partly cloudy","⛅"], 3:["Overcast","☁"],
-        45:["Fog","🌫"], 48:["Rime fog","🌫"], 51:["Light drizzle","🌦"], 53:["Drizzle","🌦"], 55:["Heavy drizzle","🌧"],
-        61:["Light rain","🌦"], 63:["Rain","🌧"], 65:["Heavy rain","🌧"], 71:["Light snow","🌨"], 73:["Snow","🌨"], 75:["Heavy snow","❄"],
-        80:["Rain showers","🌦"], 81:["Showers","🌧"], 82:["Heavy showers","⛈"], 95:["Thunderstorm","⛈"],
-        96:["Thunderstorm with hail","⛈"], 99:["Severe thunderstorm","⛈"]
-    };
-    try{
-        const url = "https://api.open-meteo.com/v1/forecast?latitude=27.48&longitude=94.93&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FKolkata";
-        const response = await fetch(url);
-        if(!response.ok) throw new Error("Weather service unavailable");
-        const payload = await response.json();
-        const current = payload.current;
-        if(!current || typeof current.temperature_2m !== "number") throw new Error("Weather data unavailable");
-        const details = weatherLabels[current.weather_code] || ["Current conditions","☁"];
-        temperature.textContent = `${Math.round(current.temperature_2m)}°C`;
-        condition.textContent = details[0];
-        icon.textContent = details[1];
-        const meta = [
-            typeof current.apparent_temperature === "number" ? `Feels ${Math.round(current.apparent_temperature)}°C` : "",
-            typeof current.relative_humidity_2m === "number" ? `Humidity ${current.relative_humidity_2m}%` : "",
-            typeof current.wind_speed_10m === "number" ? `Wind ${Math.round(current.wind_speed_10m)} km/h` : ""
-        ].filter(Boolean).join(" · ");
-        condition.title = meta;
-        condition.setAttribute("aria-label", `Dibrugarh: ${details[0]}, ${temperature.textContent}${meta ? ". " + meta : ""}`);
-    }catch(error){
-        temperature.textContent = "—°C"; condition.textContent = "Weather unavailable"; icon.textContent = "☁";
-        console.warn("Dibrugarh weather could not be loaded:", error);
-    }
 }
 
 /* ==========================================================================
@@ -692,3 +693,7 @@ document.addEventListener("DOMContentLoaded", function () {
 );
 
 });
+
+
+// Weather is independent of CSV initialization and never blocks dashboard data.
+loadDibrugarhWeather();

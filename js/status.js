@@ -5,7 +5,8 @@ function updateHeaderDate(){
 
     let now = new Date();
 
-    dateElem.innerText = now.toDateString();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    dateElem.innerText = now.toLocaleDateString("en-GB", { weekday: "short" }) + " · " + String(now.getDate()).padStart(2, "0") + "-" + monthNames[now.getMonth()] + "-" + now.getFullYear();
 
     if(isSpecialDay()){
         dateElem.style.color = "#ffd600";
