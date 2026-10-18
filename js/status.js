@@ -6,7 +6,18 @@ function updateHeaderDate(){
     let now = new Date();
 
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    dateElem.innerText = now.toLocaleDateString("en-GB", { weekday: "short" }) + " · " + String(now.getDate()).padStart(2, "0") + "-" + monthNames[now.getMonth()] + "-" + now.getFullYear();
+    const weekdayElem = document.getElementById("todayWeekday");
+
+if (weekdayElem) {
+    weekdayElem.innerText = now.toLocaleDateString("en-GB", {
+        weekday: "long"
+    });
+}
+
+dateElem.innerText =
+    String(now.getDate()).padStart(2, "0") +
+    "-" + monthNames[now.getMonth()] +
+    "-" + now.getFullYear();
 
     if(isSpecialDay()){
         dateElem.style.color = "#ffd600";
