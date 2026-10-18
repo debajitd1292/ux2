@@ -18,22 +18,16 @@
 <body>
 <div class="app-page active" id="page-home">
 <div class="header">
-    <img src="https://raw.githubusercontent.com/debajitd1292/ux2/main/logo.png" 
-     class="logo" 
-     onload="this.style.opacity=1; this.style.transform='scale(1)'"> 
-
-    <h3>PPU OPERATIONS DASHBOARD</h3> 
-    <div id="todayDate"></div> 
-
-    <div id="todayNote" style="margin-top:5px;font-weight:bold;"></div> 
-
-    <div class="badge" id="todayShiftBadge">Loading...</div> 
-
-    <div class="holiday-text"> 
-        Next GH: <span id="nextGH"></span> • 
-        Next RH: <span id="nextRH"></span> 
-    </div> 
-
+    <div class="header-brand">
+        <img src="https://raw.githubusercontent.com/debajitd1292/ux2/main/logo.png"
+             class="logo" alt="BCPL logo"
+             onload="this.style.opacity=1; this.style.transform='scale(1)'">
+        <div class="header-brand-text">
+            <div class="header-kicker">BCPL · POLYPROPYLENE UNIT</div>
+            <h3>PPU OPERATIONS</h3>
+            <div class="header-subtitle">Operations &amp; Shift Information</div>
+        </div>
+    </div>
 </div>
 
 <div class="info-bar">
@@ -53,6 +47,33 @@
         <span class="info-name" id="presentShiftIncharge">—</span>
     </div>
 
+</div>
+
+<div class="dashboard-summary-grid">
+    <section class="summary-card date-summary" aria-label="Current date">
+        <div class="summary-card-label"><span class="summary-icon" aria-hidden="true">▦</span> TODAY</div>
+        <div id="todayDate" class="summary-primary">Loading date…</div>
+        <div id="todayNote" class="summary-secondary"></div>
+    </section>
+    <section class="summary-card weather-summary" aria-label="Dibrugarh weather">
+        <div class="summary-card-label"><span class="summary-icon" aria-hidden="true">☼</span> DIBRUGARH WEATHER</div>
+        <div class="weather-main">
+            <span id="weatherIcon" class="weather-icon" aria-hidden="true">—</span>
+            <span id="weatherTemperature" class="weather-temperature">—°C</span>
+        </div>
+        <div id="weatherCondition" class="summary-secondary">Loading weather…</div>
+    </section>
+</div>
+
+<div class="holiday-summary-grid">
+    <section class="holiday-summary-card gh-summary">
+        <div class="holiday-summary-label">NEXT GENERAL HOLIDAY</div>
+        <div id="nextGH" class="holiday-summary-date">—</div>
+    </section>
+    <section class="holiday-summary-card rh-summary">
+        <div class="holiday-summary-label">NEXT RESTRICTED HOLIDAY</div>
+        <div id="nextRH" class="holiday-summary-date">—</div>
+    </section>
 </div>
 
 <div id="alertSection" style="margin:10px;"></div>
