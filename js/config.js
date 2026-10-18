@@ -1,6 +1,6 @@
 const DATA_VERSION = Date.now();
 
-const baseUrl = "https://raw.githubusercontent.com/debajitd1292/ux2/main/";
+const baseUrl = "https://raw.githubusercontent.com/debajitd1292/ppu/main/";
 
 const holidayUrl =
     baseUrl + "updates/holiday.csv?v=" + DATA_VERSION;

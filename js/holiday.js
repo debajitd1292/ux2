@@ -97,25 +97,6 @@ function isSpecialDay(){
 }
 
 
-
-function updateTodayHolidayNames() {
-    const element = document.getElementById("todayHolidayNames");
-    if (!element) return;
-
-    const todayKey = formatDate(new Date());
-    const todaysHolidays = holidays.filter(h =>
-        h.date === todayKey && ["GH", "RH"].includes(String(h.type || "").trim().toUpperCase())
-    );
-
-    element.textContent = todaysHolidays
-        .map(h => {
-            const type = String(h.type || "").trim().toUpperCase();
-            const name = String(h.name || "").trim();
-            return name ? `${type}: ${name}` : type;
-        })
-        .join(" • ");
-}
-
 function calcHoliday(){
 
     let today = new Date();
@@ -154,7 +135,7 @@ function calcHoliday(){
 
         // Find nearest GH
 
-        if (String(h.type || "").trim().toUpperCase() === "GH") {
+        if(h.type === "GH"){
 
             if(!nextGH || hd < nextGH.dateObj){
 
@@ -169,7 +150,7 @@ function calcHoliday(){
 
         // Find nearest RH
 
-        if (String(h.type || "").trim().toUpperCase() === "RH") {
+        if(h.type === "RH"){
 
             if(!nextRH || hd < nextRH.dateObj){
 
@@ -184,49 +165,32 @@ function calcHoliday(){
     });
 
 
-    const ghElem = document.getElementById("nextGH");
-const rhElem = document.getElementById("nextRH");
-const ghNameElem = document.getElementById("nextGHName");
-const rhNameElem = document.getElementById("nextRHName");
+    const ghElem =
+        document.getElementById("nextGH");
 
-function formatNextHolidayDate(dateStr) {
-    if (!dateStr) return "—";
+    const rhElem =
+        document.getElementById("nextRH");
 
-    const parts = dateStr.split("-");
-    if (parts.length !== 3) return dateStr;
 
-    const day = parts[0].padStart(2, "0");
-    const month = parseInt(parts[1], 10);
-    const year = parts[2];
+    if(ghElem){
 
-    const months = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
+    ghElem.innerText =
+        nextGH
+            ? formatHolidayDate(nextGH.date) +
+              (nextGH.name ? " (" + nextGH.name + ")" : "")
+            : "—";
 
-    if (month < 1 || month > 12) return dateStr;
+    }
 
-    return `${day}-${months[month - 1]}-${year}`;
-}
 
-if (ghElem) {
-    ghElem.textContent = nextGH
-        ? formatNextHolidayDate(nextGH.date)
-        : "No upcoming GH";
-}
+    if(rhElem){
 
-if (rhElem) {
-    rhElem.textContent = nextRH
-        ? formatNextHolidayDate(nextRH.date)
-        : "No upcoming RH";
-}
+    rhElem.innerText =
+        nextRH
+            ? formatHolidayDate(nextRH.date) +
+              (nextRH.name ? " (" + nextRH.name + ")" : "")
+            : "—";
 
-if (ghNameElem) {
-    ghNameElem.textContent = nextGH?.name || "";
-}
-
-if (rhNameElem) {
-    rhNameElem.textContent = nextRH?.name || "";
-}
+    }
 
 }

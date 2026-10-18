@@ -134,28 +134,28 @@ function refresh(){
     document.getElementById("todayTitle").innerText =
     `Today's Shift (${monthNames[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year})`;
 
-const badge = document.getElementById("todayShiftBadge");
+let badge = document.getElementById("todayShiftBadge");
 
-if (badge) {
-    // Keep the shift code in the capsule; the label sits beside it in HTML.
-    const shiftCode = selectedName && shift && shift !== "-" && shift !== "Select Name"
-        ? shift.trim()
-        : "—";
+if(!selectedName){
+    badge.innerText = "Select a name to view shift";
+}else{
+    badge.innerText = "Today's Shift: " + shift;
+}
 
-    badge.textContent = shiftCode;
-    badge.className = "badge";
+badge.className = "badge";
 
-    if (shiftCode !== "—") {
-        let primary;
+if(shift && shift !== "-" && shift !== "Select Name"){
 
-        if (shiftCode.includes("C")) primary = "C";
-        else if (shiftCode.includes("B")) primary = "B";
-        else if (shiftCode.includes("A")) primary = "A";
-        else if (shiftCode === "O") primary = "OFF";
-        else primary = shiftCode;
+    let primary;
 
-        badge.classList.add(primary);
-    }
+    if(shift.includes("C")) primary = "C";
+    else if(shift.includes("B")) primary = "B";
+    else if(shift.includes("A")) primary = "A";
+    else primary = shift;
+
+    if(primary === "O") primary = "OFF";
+
+    badge.classList.add(primary);
 }
 
 render("today", today);
@@ -379,7 +379,6 @@ if(alertsText !== undefined){
 
 
         loadHolidayData(holidayText);
-        updateHeaderDate();
 
         loadTrainingData(trainingText);
 

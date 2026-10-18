@@ -17,81 +17,45 @@
 
 <body>
 <div class="app-page active" id="page-home">
-<header class="header" aria-label="PPU Operations Dashboard header">
-    <div class="header-banner" aria-hidden="true"></div>
-    <div class="header-content">
-        <img src="https://raw.githubusercontent.com/debajitd1292/ux2/main/logo.png"
-             class="logo"
-             alt="BCPL logo"
-             onload="this.style.opacity=1; this.style.transform='scale(1)'">
-        <div class="header-title-group">
-            <h1>OPERATIONS DASHBOARD</h1>
-            <div class="header-subtitle">Polypropylene Unit <span aria-hidden="true">•</span> BCPL</div>
-        </div>
-    </div>
-</header>
+<div class="header">
+    <img src="https://raw.githubusercontent.com/debajitd1292/ppu/main/logo.png" 
+     class="logo" 
+     onload="this.style.opacity=1; this.style.transform='scale(1)'"> 
 
-<div class="info-bar" aria-label="Plant leadership and shift in-charge">
+    <h3>PPU OPERATIONS DASHBOARD</h3> 
+    <div id="todayDate"></div> 
+
+    <div id="todayNote" style="margin-top:5px;font-weight:bold;"></div> 
+
+    <div class="badge" id="todayShiftBadge">Loading...</div> 
+
+    <div class="holiday-text"> 
+        Next GH: <span id="nextGH"></span> • 
+        Next RH: <span id="nextRH"></span> 
+    </div> 
+
+</div>
+
+<div class="info-bar">
+
     <div class="info-row">
         <span class="info-label">Head of Department</span>
         <span class="info-name">Sh. Pradeep Rawat</span>
     </div>
+
     <div class="info-row">
         <span class="info-label">Area In-charge</span>
         <span class="info-name">Sh. Manoj Kumar Haloi</span>
     </div>
+
     <div class="info-row">
         <span class="info-label">Shift In-charge (Current)</span>
         <span class="info-name" id="presentShiftIncharge">—</span>
     </div>
+
 </div>
 
-<section class="home-summary-grid" aria-label="Today's date, shift and weather">
-    <article class="summary-card today-summary-card">
-        <div class="summary-eyebrow">TODAY</div>
-        <div id="todayWeekday" class="day-name"></div>
-        <div id="todayDate" class="today-date"></div>
-        <div id="todayHolidayNames" class="today-holiday-names" aria-live="polite"></div>
-        <div class="today-shift-line">
-            <span>Today's Shift:</span>
-            <span class="badge" id="todayShiftBadge">—</span>
-        </div>
-    </article>
-
-    <article class="summary-card weather-card" id="weatherCard" aria-label="Current weather">
-        <div class="weather-card-top">
-    <div class="summary-eyebrow">DIBRUGARH WEATHER</div>
-    <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
-</div>
-
-<div class="weather-main-line">
-    <div id="weatherTemperature" class="weather-temperature">--°C</div>
-    <div id="weatherCondition" class="weather-condition">Loading weather…</div>
-</div>
-
-<div class="weather-details">
-    <span>Feels like <strong id="weatherFeelsLike">--°C</strong></span>
-    <span class="weather-detail-separator" aria-hidden="true"></span>
-    <span>Humidity <strong id="weatherHumidity">--%</strong></span>
-</div>
-    </article>
-</section>
-
-<div class="next-holidays-grid">
-    <article class="next-holiday-card">
-        <div class="next-holiday-title">Next GH</div>
-        <div id="nextGH" class="next-holiday-date">—</div>
-        <div id="nextGHName" class="next-holiday-name"></div>
-    </article>
-
-    <article class="next-holiday-card">
-        <div class="next-holiday-title">Next RH</div>
-        <div id="nextRH" class="next-holiday-date">—</div>
-        <div id="nextRHName" class="next-holiday-name"></div>
-    </article>
-</div>
-
-<div id="alertSection" class="alert-section" style="margin:10px;"></div>
+<div id="alertSection" style="margin:10px;"></div>
 
 <div class="card">
 
@@ -345,7 +309,6 @@
 <script src="js/notes.js"></script>
 <script src="js/training.js"></script>
 <script src="js/theme.js"></script>
-<script src="js/weather.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/status.js"></script>
 <script src="js/selection.js"></script>
