@@ -97,6 +97,25 @@ function isSpecialDay(){
 }
 
 
+
+function updateTodayHolidayNames() {
+    const element = document.getElementById("todayHolidayNames");
+    if (!element) return;
+
+    const todayKey = formatDate(new Date());
+    const todaysHolidays = holidays.filter(h =>
+        h.date === todayKey && ["GH", "RH"].includes(String(h.type || "").trim().toUpperCase())
+    );
+
+    element.textContent = todaysHolidays
+        .map(h => {
+            const type = String(h.type || "").trim().toUpperCase();
+            const name = String(h.name || "").trim();
+            return name ? `${type}: ${name}` : type;
+        })
+        .join(" • ");
+}
+
 function calcHoliday(){
 
     let today = new Date();

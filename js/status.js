@@ -1,31 +1,22 @@
-function updateHeaderDate(){
-
-    let dateElem = document.getElementById("todayDate");
-    if(!dateElem) return;
-
-    let now = new Date();
-
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function updateHeaderDate() {
+    const dateElem = document.getElementById("todayDate");
     const weekdayElem = document.getElementById("todayWeekday");
+    if (!dateElem) return;
 
-if (weekdayElem) {
-    weekdayElem.innerText = now.toLocaleDateString("en-GB", {
-        weekday: "long"
-    });
-}
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][now.getMonth()];
 
-dateElem.innerText =
-    String(now.getDate()).padStart(2, "0") +
-    "-" + monthNames[now.getMonth()] +
-    "-" + now.getFullYear();
+    dateElem.textContent = `${day}-${month}-${now.getFullYear()}`;
 
-    if(isSpecialDay()){
-        dateElem.style.color = "#ffd600";
-        dateElem.style.fontWeight = "600";
-    } else {
-        dateElem.style.color = "";
-        dateElem.style.fontWeight = "";
+    if (weekdayElem) {
+        weekdayElem.textContent = now.toLocaleDateString("en-US", { weekday: "long" });
     }
+
+    // Keep the app's existing holiday/Sunday/2nd & 4th Saturday logic.
+    dateElem.classList.toggle("special-date", isSpecialDay());
+    updateTodayHolidayNames();
 }
 
 

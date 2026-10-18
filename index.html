@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PPU OPERATIONS DASHBOARD</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <link rel="manifest" href="manifest.json">
 
@@ -19,71 +17,97 @@
 
 <body>
 <div class="app-page active" id="page-home">
-
-  <header class="header">
-    <div class="brand-row">
-      <img src="logo.png" class="logo" alt="BCPL Polypropylene Unit logo">
-      <div class="brand-copy">
-      <h1>PPU OPERATIONS</h1>
-      <div class="header-eyebrow">POLYPROPYLENE UNIT · BCPL</div>
-      </div>
-      <div class="header-status"><span class="status-dot"></span><span>Operations Dashboard</span></div>
+<header class="header" aria-label="PPU Operations Dashboard header">
+    <div class="header-banner" aria-hidden="true"></div>
+    <div class="header-content">
+        <img src="https://raw.githubusercontent.com/debajitd1292/ux2/main/logo.png"
+             class="logo"
+             alt="BCPL logo"
+             onload="this.style.opacity=1; this.style.transform='scale(1)'">
+        <div class="header-title-group">
+            <h1>OPERATIONS DASHBOARD</h1>
+            <div class="header-subtitle">Polypropylene Unit <span aria-hidden="true">•</span> BCPL</div>
+        </div>
     </div>
-  </header>
+</header>
 
-  <section class="info-bar" aria-label="Unit leadership and current shift in-charge">
-    <div class="info-row"><span class="info-label">Head of Department</span><span class="info-name">Sh. Pradeep Rawat</span></div>
-    <div class="info-row"><span class="info-label">Area In-charge</span><span class="info-name">Sh. Manoj Kumar Haloi</span></div>
-    <div class="info-row"><span class="info-label">Shift In-charge (Current)</span><span class="info-name" id="presentShiftIncharge">—</span></div>
-  </section>
-
-  <section class="date-weather-grid" aria-label="Date and weather">
-    <article class="overview-card date-card">
-      <div class="date-display">
-    <span class="overview-icon calendar-symbol" aria-hidden="true">▦</span>
-    <div class="date-display-text">
-        <div id="todayWeekday" class="today-weekday">Loading…</div>
-        <div id="todayDate" class="overview-main-date">Loading date…</div>
-        <div id="todayNote" class="overview-note"></div>
+<div class="info-bar" aria-label="Plant leadership and shift in-charge">
+    <div class="info-row">
+        <span class="info-label">Head of Department</span>
+        <span class="info-name">Sh. Pradeep Rawat</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Area In-charge</span>
+        <span class="info-name">Sh. Manoj Kumar Haloi</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Shift In-charge (Current)</span>
+        <span class="info-name" id="presentShiftIncharge">—</span>
     </div>
 </div>
+
+<section class="home-summary-grid" aria-label="Today's date, shift and weather">
+    <article class="summary-card today-summary-card">
+        <div class="summary-eyebrow">TODAY</div>
+        <div id="todayWeekday" class="day-name"></div>
+        <div id="todayDate" class="today-date"></div>
+        <div id="todayHolidayNames" class="today-holiday-names" aria-live="polite"></div>
+        <div class="today-shift-line">
+            <span>Today's Shift:</span>
+            <span class="badge" id="todayShiftBadge">—</span>
+        </div>
     </article>
-    <article class="overview-card weather-card" aria-live="polite">
-      
-<div class="weather-main weather-main-compact">
-    <span class="overview-icon weather-symbol" id="weatherIcon">☁</span>
-    <span id="weatherTemp">—°C</span>
-    <span id="weatherCondition">Loading weather…</span>
+
+    <article class="summary-card weather-card" id="weatherCard" aria-label="Current weather">
+        <div class="weather-card-top">
+            <div class="summary-eyebrow">WEATHER</div>
+            <span id="weatherIcon" class="weather-icon" aria-hidden="true">🌤️</span>
+        </div>
+        <div class="weather-location">Dibrugarh, Assam</div>
+        <div id="weatherTemperature" class="weather-temperature">--°C</div>
+        <div id="weatherCondition" class="weather-condition">Loading weather…</div>
+        <div class="weather-details">
+            <span>Feels like <strong id="weatherFeelsLike">--°C</strong></span>
+            <span class="weather-detail-separator" aria-hidden="true"></span>
+            <span>Humidity <strong id="weatherHumidity">--%</strong></span>
+        </div>
+        <div id="weatherUpdated" class="weather-updated" aria-live="polite"></div>
+    </article>
+</section>
+
+<div class="holiday-text holiday-strip">
+    <span>Next GH: <strong id="nextGH">—</strong></span>
+    <span class="holiday-separator" aria-hidden="true">•</span>
+    <span>Next RH: <strong id="nextRH">—</strong></span>
 </div>
-<div class="weather-foot" id="weatherDetails">Dibrugarh</div>
 
-    </article>
-  </section>
+<div id="alertSection" class="alert-section" style="margin:10px;"></div>
 
-  <section class="holiday-grid" aria-label="Upcoming holidays">
-    <article class="holiday-card holiday-gh"><div class="holiday-kicker">NEXT GENERAL HOLIDAY</div><div id="nextGH" class="holiday-value">—</div></article>
-    <article class="holiday-card holiday-rh"><div class="holiday-kicker">NEXT RESTRICTED HOLIDAY</div><div id="nextRH" class="holiday-value">—</div></article>
-  </section>
+<div class="card">
 
-  <section class="current-shift-banner" aria-label="Selected employee's shift">
-    <div class="shift-banner-label"><span class="clock-icon">◷</span><span>Today's Shift</span></div>
-    <span class="badge" id="todayShiftBadge">—</span>
-    <span class="shift-banner-time" id="todayShiftTime">Select a name to view shift timing</span>
-  </section>
-
-  <div id="alertSection" class="alert-section"></div>
-
-  <section class="card selector-card" aria-label="Employee selection">
     <div class="row">
-      <div class="field"><label for="categorySelector">Select Category</label><select id="categorySelector" onchange="onCategoryChange()"><option value="" disabled selected>Select Category</option><option value="exec">Executive</option><option value="nonexec">Non-Executive</option></select></div>
-      <div class="field"><label for="nameSelector">Select Name</label><select id="nameSelector" onchange="onNameChange()"></select></div>
+    <div class="field">
+        <label>Select Category:</label>
+        <select id="categorySelector" onchange="onCategoryChange()">
+            <option value="" disabled selected>Select Category</option>
+            <option value="exec">Executive</option>
+            <option value="nonexec">Non-Executive</option>
+        </select>
     </div>
-  </section>
 
-  <section class="card today-team-card">
+    <div class="field">
+        <label>Select Name:</label>
+        <select id="nameSelector" onchange="onNameChange()"></select>
+    </div>
+</div>
+
+</div>
+
+<div class="card">
+
     <h3 id="todayTitle">Today's Shift</h3>
     <div id="today"></div>
-  </section>
+</div>
 
 </div>
 
@@ -311,6 +335,7 @@
 <script src="js/notes.js"></script>
 <script src="js/training.js"></script>
 <script src="js/theme.js"></script>
+<script src="js/weather.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/status.js"></script>
 <script src="js/selection.js"></script>

@@ -6,19 +6,19 @@ updateShiftUrls();
 
 Promise.all([
     fetchCSV(shiftUrlPrev, true),
-    fetchCSV(shiftUrl),
+    fetch(shiftUrl).then(r => r.text()),
     fetchCSV(shiftUrlNext, true),
     fetchCSV(holidayUrl, true),
-    fetchCSV(notesUrl, true),
-    fetchCSV(trainingUrl, true),
-    fetchCSV(productionPlanUrl, true),
-    fetchCSV(productionTargetUrl, true),
-    fetchCSV(imsUrl, true),
+    fetch(notesUrl).then(r => r.text()),
+    fetch(trainingUrl).then(r => r.text()),
+    fetch(productionPlanUrl).then(r => r.text()),
+    fetch(productionTargetUrl).then(r => r.text()),
+    fetch(imsUrl).then(r => r.text()),
     fetchCSV(nonExecUrlPrev, true),
-    fetchCSV(nonExecUrl, true),
-    fetchCSV(nonExecUrlNext, true),
-    fetchCSV(seniorityExecUrl, true),
-    fetchCSV(seniorityNonExecUrl, true)
+    fetch(nonExecUrl).then(r => r.text()),
+    fetch(nonExecUrlNext).then(r => r.text()),
+    fetch(seniorityExecUrl).then(r => r.text()),
+    fetch(seniorityNonExecUrl).then(r => r.text())
 ])
 .then(([
     shiftTextPrev,
@@ -70,7 +70,7 @@ Promise.all([
         dataNext
     );
 
-    header = data[0]?.map(x => x.trim()) || [];
+    header = data[0].map(x => x.trim());
 
     const nonExecPrev = parseCSV(nonExecTextPrev);
     const nonExecCurrent = parseCSV(nonExecTextCurrent);
