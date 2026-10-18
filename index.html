@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PPU OPERATIONS DASHBOARD</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <link rel="manifest" href="manifest.json">
 
@@ -22,9 +24,8 @@
     <div class="brand-row">
       <img src="logo.png" class="logo" alt="BCPL Polypropylene Unit logo">
       <div class="brand-copy">
-        <div class="brand-eyebrow">BCPL · POLYPROPYLENE UNIT</div>
-        <h1>PPU OPERATIONS</h1>
-        <div class="brand-subtitle">Operations &amp; Shift Information</div>
+      <h1>PPU OPERATIONS</h1>
+      <div class="header-eyebrow">POLYPROPYLENE UNIT · BCPL</div>
       </div>
       <div class="header-status"><span class="status-dot"></span><span>Operations Dashboard</span></div>
     </div>
@@ -38,14 +39,24 @@
 
   <section class="date-weather-grid" aria-label="Date and weather">
     <article class="overview-card date-card">
-      <div class="overview-kicker"><span class="overview-icon">▦</span> TODAY</div>
-      <div id="todayDate" class="overview-main-date">Loading date…</div>
-      <div id="todayNote" class="overview-note"></div>
+      <div class="date-display">
+    <span class="overview-icon calendar-symbol" aria-hidden="true">▦</span>
+    <div class="date-display-text">
+        <div id="todayWeekday" class="today-weekday">Loading…</div>
+        <div id="todayDate" class="overview-main-date">Loading date…</div>
+        <div id="todayNote" class="overview-note"></div>
+    </div>
+</div>
     </article>
     <article class="overview-card weather-card" aria-live="polite">
-      <div class="overview-kicker"><span class="overview-icon" id="weatherIcon">☁</span> DIBRUGARH WEATHER</div>
-      <div class="weather-main"><span id="weatherTemp">—°C</span><span id="weatherCondition">Loading weather…</span></div>
-      <div class="weather-foot" id="weatherDetails">Dibrugarh</div>
+      
+<div class="weather-main weather-main-compact">
+    <span class="overview-icon weather-symbol" id="weatherIcon">☁</span>
+    <span id="weatherTemp">—°C</span>
+    <span id="weatherCondition">Loading weather…</span>
+</div>
+<div class="weather-foot" id="weatherDetails">Dibrugarh</div>
+
     </article>
   </section>
 
