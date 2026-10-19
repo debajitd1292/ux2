@@ -25,24 +25,14 @@ function loadHolidayData(holidayText){
 
 function formatHolidayDate(dateStr){
 
-    let [d,m,y] = dateStr.split("-");
-    let day = parseInt(d);
-
-    let suffix = "th";
-
-    if(day === 1 || day === 21 || day === 31)
-        suffix = "st";
-    else if(day === 2 || day === 22)
-        suffix = "nd";
-    else if(day === 3 || day === 23)
-        suffix = "rd";
+    let [d, m, y] = dateStr.split("-");
 
     const months = [
-        "Jan","Feb","Mar","Apr","May","Jun",
-        "Jul","Aug","Sep","Oct","Nov","Dec"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
 
-    return day + suffix + " " + months[parseInt(m) - 1];
+    return d + "-" + months[parseInt(m, 10) - 1] + "-" + y;
 }
 
 
@@ -174,23 +164,17 @@ function calcHoliday(){
 
     if(ghElem){
 
-    ghElem.innerText =
-        nextGH
-            ? formatHolidayDate(nextGH.date) +
-              (nextGH.name ? " (" + nextGH.name + ")" : "")
-            : "—";
-
+    ghElem.innerHTML = nextGH
+        ? `<div class="holiday-date-main">${formatHolidayDate(nextGH.date)}</div>
+           <div class="holiday-name">${nextGH.name || ""}</div>`
+        : "—";
     }
-
 
     if(rhElem){
 
-    rhElem.innerText =
-        nextRH
-            ? formatHolidayDate(nextRH.date) +
-              (nextRH.name ? " (" + nextRH.name + ")" : "")
-            : "—";
-
+    rhElem.innerHTML = nextRH
+    ? `<div class="holiday-date-main">${formatHolidayDate(nextRH.date)}</div>
+       <div class="holiday-name">${nextRH.name || ""}</div>`
+    : "—";
     }
-
 }

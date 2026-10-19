@@ -18,21 +18,33 @@
 <body>
 <div class="app-page active" id="page-home">
 <div class="header">
-    <img src="https://raw.githubusercontent.com/debajitd1292/ux2/main/logo.png" 
-     class="logo" 
-     onload="this.style.opacity=1; this.style.transform='scale(1)'"> 
+    <img src="images/logo.png"
+     class="logo"
+     onload="this.style.opacity=1; this.style.transform='scale(1)'">
 
-    <h3>PPU OPERATIONS DASHBOARD</h3> 
+    <h3>OPERATIONS DASHBOARD</h3>
+    <div class="header-subtitle">Polypropylene Unit • BCPL</div>
+    <div class="header-banner">
+        <img src="images/banner.jpg" alt="Polypropylene Plant"
+             onerror="this.parentElement.style.display='none'">
+    </div>
     <div id="todayDate"></div> 
 
     <div id="todayNote" style="margin-top:5px;font-weight:bold;"></div> 
 
     <div class="badge" id="todayShiftBadge">Loading...</div> 
 
-    <div class="holiday-text"> 
-        Next GH: <span id="nextGH"></span> • 
-        Next RH: <span id="nextRH"></span> 
-    </div> 
+    <div class="holiday-cards">
+        <div class="holiday-card">
+            <div class="holiday-title">Next GH</div>
+            <div id="nextGH" class="holiday-date">—</div>
+        </div>
+
+        <div class="holiday-card">
+            <div class="holiday-title">Next RH</div>
+            <div id="nextRH" class="holiday-date">—</div>
+        </div>
+    </div>
 
 </div>
 
