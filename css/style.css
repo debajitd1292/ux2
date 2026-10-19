@@ -2606,3 +2606,137 @@ body.dark .today-weather-summary {
     border-color: rgba(148, 163, 184, 0.2);
 }
 
+
+/* COMPACT TOP DASHBOARD SECTIONS */
+.today-weather-row {
+    gap: 7px;
+    margin: 7px 0;
+    text-align: left;
+}
+
+.today-weather-summary,
+.weather-card {
+    padding: 8px;
+    border-radius: 9px;
+    box-shadow: none;
+    text-align: left;
+    align-items: flex-start;
+}
+
+/* LIGHT MODE */
+.today-weather-summary,
+.weather-card,
+.holiday-card {
+    background: linear-gradient(135deg, #e8f1fc, #d8e6f7);
+    color: #1e3a5f;
+    border: 1px solid #b8cde8;
+}
+
+.holiday-cards {
+    gap: 7px;
+    margin: 7px 10px;
+}
+
+.holiday-card {
+    padding: 7px;
+    border-radius: 9px;
+}
+
+.holiday-title {
+    color: #315781;
+    margin-bottom: 3px;
+    font-size: 11px;
+}
+
+.holiday-date,
+.holiday-date-main {
+    color: #1e3a5f;
+    font-size: 12px;
+}
+
+/* DARK MODE */
+body.dark .today-weather-summary,
+body.dark .weather-card,
+body.dark .holiday-card {
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+    border: 1px solid #496789;
+}
+
+body.dark .holiday-title,
+body.dark .holiday-date,
+body.dark .holiday-date-main,
+body.dark .holiday-name {
+    color: #dbeafe;
+}
+
+/* COMPACT WEATHER DETAILS */
+.weather-card h4 {
+    margin-bottom: 5px;
+}
+
+.weather-main {
+    justify-content: flex-start;
+    gap: 5px;
+    margin-bottom: 3px;
+}
+
+#weatherTemperature {
+    font-size: 21px;
+}
+
+#weatherCondition {
+    margin-bottom: 5px;
+    font-size: 11px;
+}
+
+.weather-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 8px;
+    font-size: 9px;
+    line-height: 1.3;
+}
+
+.weather-details strong {
+    display: inline;
+    font-size: 10px;
+    margin: 0;
+}
+
+#todayDate {
+    text-align: left;
+    margin-bottom: 3px;
+}
+
+#todayNote {
+    text-align: left;
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+#todayShiftBadge {
+    margin: 5px 0 0;
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+
+/* FIX: KEEP TODAY + WEATHER WITHIN THE SAME WIDTH */
+.today-weather-row {
+    width: auto;
+    max-width: none;
+    margin: 7px 10px;
+    box-sizing: border-box;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+
+/* MATCH TODAY HEADING WITH WEATHER HEADING */
+.today-weather-summary h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 5px;
+    line-height: 1.3;
+}
+
