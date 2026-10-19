@@ -11,6 +11,8 @@
         "https://api.open-meteo.com/v1/forecast" +
         "?latitude=27.4728&longitude=94.9120" +
         "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code" +
+        "&daily=temperature_2m_max,temperature_2m_min" +
+        "&forecast_days=1" +
         "&timezone=Asia%2FKolkata";
 
     const REFRESH_INTERVAL = 30 * 60 * 1000;
@@ -66,6 +68,18 @@
             byId("weatherTemperature").textContent = `${Math.round(Number(current.temperature_2m))}°C`;
             byId("weatherFeelsLike").textContent = `${Math.round(Number(current.apparent_temperature))}°C`;
             byId("weatherHumidity").textContent = `${Math.round(Number(current.relative_humidity_2m))}%`;
+
+            const daily = data.daily;
+            if (
+                daily &&
+                daily.temperature_2m_max &&
+                daily.temperature_2m_min &&
+                daily.temperature_2m_max[0] != null &&
+                daily.temperature_2m_min[0] != null
+            ) {
+                byId("weatherMaxMin").textContent =
+                    `${Math.round(daily.temperature_2m_max[0])}°C / ${Math.round(daily.temperature_2m_min[0])}°C`;
+            }
             byId("weatherCondition").textContent = condition.text;
             byId("weatherIcon").textContent = condition.icon;
 
