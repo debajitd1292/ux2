@@ -17,17 +17,19 @@ function updateHeaderDate(){
 
 dateElem.innerHTML = `
     <div class="header-date">${weekday}, ${formattedDate}</div>
-`;
+    `;
 
     const dateText = dateElem.querySelector(".header-date");
 
     if (dateText) {
-        if (isSpecialDay()) {
-            dateText.style.color = "#ffd600";
-        } else {
-            dateText.style.color = "";
-        }
+    if (isSpecialDay()) {
+        dateText.style.color = document.body.classList.contains("dark")
+            ? "#FBBF24"
+            : "#B45309";
+    } else {
+        dateText.style.color = "";
     }
+  }
 }
 
 
