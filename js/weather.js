@@ -19,8 +19,31 @@
     let refreshTimer = null;
     let isLoading = false;
     let hasSuccessfulData = false;
+    const WEATHER_CACHE_KEY = "ppuWeatherCache";
 
     const byId = (id) => document.getElementById(id);
+
+function restoreCachedWeather() {
+    try {
+        const cached = localStorage.getItem(WEATHER_CACHE_KEY);
+        if (!cached) return;
+
+        const saved = JSON.parse(cached);
+
+        if (!saved || !saved.temperature || !saved.condition) return;
+
+        byId("weatherTemperature").textContent = saved.temperature;
+        byId("weatherFeelsLike").textContent = saved.feelsLike;
+        byId("weatherHumidity").textContent = saved.humidity;
+        byId("weatherMaxMin").textContent = saved.maxMin;
+        byId("weatherCondition").textContent = saved.condition;
+        byId("weatherIcon").textContent = saved.icon;
+
+        hasSuccessfulData = true;
+    } catch (error) {
+        console.warn("Could not restore cached weather:", error);
+    }
+}
 
     function conditionFor(code, isDay) {
         if (code === 0) return { text: isDay ? "Clear sky" : "Clear night", icon: isDay ? "☀️" : "🌙" };
@@ -83,6 +106,19 @@
             byId("weatherCondition").textContent = condition.text;
             byId("weatherIcon").textContent = condition.icon;
 
+try {
+    localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({
+        temperature: byId("weatherTemperature").textContent,
+        feelsLike: byId("weatherFeelsLike").textContent,
+        humidity: byId("weatherHumidity").textContent,
+        maxMin: byId("weatherMaxMin").textContent,
+        condition: byId("weatherCondition").textContent,
+        icon: byId("weatherIcon").textContent
+    }));
+} catch (error) {
+    console.warn("Could not save weather cache:", error);
+}
+
             // The updated-time label is intentionally not displayed.
             hasSuccessfulData = true;
         } catch (error) {
@@ -97,15 +133,18 @@
         }
     }
 
-    function init() {
-        if (!byId("weatherCard")) return;
-        refreshWeather();
-        refreshTimer = window.setInterval(refreshWeather, REFRESH_INTERVAL);
+function init() {
+    if (!byId("weatherCard")) return;
 
-        document.addEventListener("visibilitychange", function () {
-            if (document.visibilityState === "visible") refreshWeather();
-        });
-    }
+    restoreCachedWeather();
+    refreshWeather();
+
+    refreshTimer = window.setInterval(refreshWeather, REFRESH_INTERVAL);
+
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") refreshWeather();
+    });
+}
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", init, { once: true });

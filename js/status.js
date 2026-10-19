@@ -5,17 +5,19 @@ function updateHeaderDate(){
 
     let now = new Date();
 
-    const weekday = now.toLocaleDateString("en-GB", { weekday: "long" });
+    const weekday = now.toLocaleDateString("en-GB", {
+        weekday: "short"
+    });
+
     const formattedDate = now.toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "short",
         year: "numeric"
     });
 
-    dateElem.innerHTML = `
-        <div class="header-weekday">${weekday}</div>
-        <div class="header-date">${formattedDate}</div>
-    `;
+dateElem.innerHTML = `
+    <div class="header-date">${weekday}, ${formattedDate}</div>
+`;
 
     const dateText = dateElem.querySelector(".header-date");
 
