@@ -5,14 +5,26 @@ function updateHeaderDate(){
 
     let now = new Date();
 
-    dateElem.innerText = now.toDateString();
+    const weekday = now.toLocaleDateString("en-GB", { weekday: "long" });
+    const formattedDate = now.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
 
-    if(isSpecialDay()){
-        dateElem.style.color = "#ffd600";
-        dateElem.style.fontWeight = "600";
-    } else {
-        dateElem.style.color = "";
-        dateElem.style.fontWeight = "";
+    dateElem.innerHTML = `
+        <div class="header-weekday">${weekday}</div>
+        <div class="header-date">${formattedDate}</div>
+    `;
+
+    const dateText = dateElem.querySelector(".header-date");
+
+    if (dateText) {
+        if (isSpecialDay()) {
+            dateText.style.color = "#ffd600";
+        } else {
+            dateText.style.color = "";
+        }
     }
 }
 
