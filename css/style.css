@@ -1564,7 +1564,7 @@ body.dark #page-production .production-card > h3,
 body.dark #page-training .card > h3,
 body.dark #page-ims .ims-card > h3,
 body.dark #page-others .settings-card > h3 {
-    background: linear-gradient(135deg, #0f172a, #020617);
+    background: linear-gradient(135deg, #1e3a5f, #263b59);
     color: #e2e8f0;
     padding: 12px 14px;
     margin: 0 0 14px;
@@ -1623,7 +1623,7 @@ body:not(.dark) #page-ims .ims-card > h3 {
 
 body.dark #page-shifts #shiftCalendarHeading,
 body.dark #page-shifts #selectedTitle {
-    background: linear-gradient(135deg, #0f172a, #020617);
+    background: linear-gradient(135deg, #1e3a5f, #263b59);
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: none;
@@ -1908,7 +1908,7 @@ body.dark {
 }
 
 body.dark #page-plant #plantHeader {
-  background: linear-gradient(135deg, #0f172a, #020617);
+  background: linear-gradient(135deg, #1e3a5f, #263b59);
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: none;
@@ -2357,7 +2357,7 @@ body.dark #productionGradeSince {
     position: relative;
     z-index: 1;
     width: 100%;
-    padding: 0 12px 0 72px;
+    padding: 0 12px 0 80px;
     box-sizing: border-box;
     text-align: left;
 }
@@ -2394,7 +2394,7 @@ body.dark #productionGradeSince {
     }
 
     .header-brand .header-titles {
-        padding-left: 55px;
+        padding-left: 60px;
         padding-right: 6px;
         text-align: left;
     }
@@ -2784,4 +2784,18 @@ body.dark .today-message {
     background: linear-gradient(135deg, #0f172a, #020617);
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* FORCE BIRTHDAY / ANNIVERSARY TEXT STYLING */
+#todayNote.today-message {
+    font-size: 16px !important;
+    text-align: center !important;
+    line-height: 1.6 !important;
+    padding: 14px !important;
+}
+
+#todayNote.today-message br {
+    display: block !important;
+    content: "";
+    margin-bottom: 10px !important;
 }
