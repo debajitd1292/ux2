@@ -87,6 +87,39 @@ function isSpecialDay(){
 }
 
 
+
+function updateTodayReason(){
+    const reasonElem = document.getElementById("todayReason");
+    if(!reasonElem) return;
+
+    const today = new Date();
+    const day = today.getDay();
+    const date = today.getDate();
+    const todayStr = formatDate(today);
+
+    let reason = "";
+
+    // Check GH/RH holiday first
+    const holiday = holidays.find(h => h.date === todayStr);
+
+    if(holiday && holiday.type === "GH"){
+        reason = `GH - ${holiday.name}`;
+    } else if(holiday && holiday.type === "RH"){
+        reason = `RH - ${holiday.name}`;
+    } else if(day === 6){
+        const week = Math.ceil(date / 7);
+
+        if(week === 2){
+            reason = "2nd Saturday";
+        } else if(week === 4){
+            reason = "4th Saturday";
+        }
+    }
+
+    reasonElem.textContent = reason ? `(${reason})` : "";
+}
+
+
 function calcHoliday(){
 
     let today = new Date();

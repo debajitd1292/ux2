@@ -116,6 +116,7 @@ function init(){
     renderTraining();
 
     calcHoliday(); 
+    updateTodayReason();
     refresh(); 
 }
 
@@ -423,6 +424,7 @@ if(alertsText !== undefined){
         }
 
         calcHoliday();
+        updateTodayReason();
 
         console.log("✅ Data refreshed successfully");
 
