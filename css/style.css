@@ -40,33 +40,41 @@ body {
 }
 
 /* 02. HEADER & LOGO */
-.header {
+/* FIXED BRANDING HEADER */
+.home-top-section {
     position: sticky;
     top: 0;
     z-index: 1000;
+}
 
-    padding: 18px 12px;
-
-    background: linear-gradient(135deg, #0f172a, #1e3a8a);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-
+.header {
+    position: relative;
+    padding: 0;
+    background: #163a5f;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
     box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-
     text-align: center;
     color: #e2e8f0;
-
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 #todayDate {
-    font-size: 15px;
+    margin-bottom: 6px;
+    line-height: 1.25;
+}
+
+.header-weekday {
+    font-size: 13px;
     font-weight: 500;
     opacity: 0.9;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+}
+
+.header-date {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: inherit;
 }
 
 .header h3 {
@@ -2287,18 +2295,37 @@ body.dark #productionGradeSince {
 
 
 /* HEADER BANNER IMAGE */
-.header-banner {
+
+/* HEADER BRAND BANNER */
+
+.header-brand {
+    position: relative;
     width: 100%;
-    max-width: none;
     height: 110px;
-    margin: 8px 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    margin: 0 0 12px;
     overflow: hidden;
     border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
+    background: #163a5f;
 }
 
-.header-banner img {
+
+.header-brand .header-banner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    box-shadow: none;
+    z-index: 0;
+}
+
+.header-brand .header-banner img {
     display: block;
     width: 100%;
     height: 100%;
@@ -2306,21 +2333,98 @@ body.dark #productionGradeSince {
     object-position: center;
 }
 
+.header-brand .header-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(8, 24, 48, 0.78),
+        rgba(8, 24, 48, 0.28)
+    );
+}
+
+
+.header-brand .logo {
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+
+    z-index: 2;
+}
+
+
+.header-brand .header-titles {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 0 12px 0 72px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.header-brand .header-titles h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    line-height: 1.3;
+    color: #ffffff;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65);
+}
+
+.header-brand .header-subtitle {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
 @media (max-width: 600px) {
-    .header-banner {
+    .header-brand {
         height: 85px;
         border-radius: 8px;
     }
+
+    .header-brand .logo {
+        left: 9px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-brand .header-titles {
+        padding-left: 55px;
+        padding-right: 6px;
+        text-align: left;
+    }
+
+    .header-brand .header-titles h3 {
+        font-size: 15px;
+        letter-spacing: 0.3px;
+    }
+
+    .header-brand .header-subtitle {
+        font-size: 11px;
+    }
 }
+
 
 /* NEXT GH / RH HOLIDAY CARDS */
 .holiday-cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    width: 100%;
+    width: auto;
     max-width: none;
-    margin: 10px 0 0;
+    margin: 10px;
     box-sizing: border-box;
 }
 
@@ -2378,3 +2482,127 @@ body.dark #productionGradeSince {
     opacity: 0.85;
     overflow-wrap: anywhere;
 }
+
+
+/* TODAY + WEATHER SIDE-BY-SIDE LAYOUT */
+.today-weather-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+    margin: 10px;
+    text-align: left;
+}
+
+.today-weather-summary,
+.weather-card {
+    min-width: 0;
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.today-weather-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+.weather-card {
+    background: linear-gradient(135deg, #ffffff, #edf4fb);
+    color: #1e3a5f;
+    border: 1px solid #d5e2f0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+.weather-card h4 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+#weatherIcon {
+    font-size: 25px;
+    line-height: 1;
+}
+
+#weatherTemperature {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+#weatherCondition {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.weather-details strong {
+    display: block;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+@media (max-width: 380px) {
+    .today-weather-row {
+        gap: 6px;
+    }
+
+    .today-weather-summary,
+    .weather-card {
+        padding: 9px 6px;
+    }
+
+    #weatherTemperature {
+        font-size: 20px;
+    }
+
+    #weatherIcon {
+        font-size: 21px;
+    }
+
+    .weather-card h4 {
+        font-size: 10px;
+    }
+
+    .weather-details {
+        font-size: 10px;
+        gap: 3px;
+    }
+}
+
+/* WEATHER CARD — DARK THEME */
+body.dark .weather-card {
+    background: linear-gradient(135deg, #1e3a5f, #172554);
+    color: #e2e8f0;
+    border-color: #38577d;
+}
+
+body.dark .today-weather-summary {
+    background: rgba(148, 163, 184, 0.08);
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
