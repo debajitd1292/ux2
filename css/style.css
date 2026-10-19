@@ -206,8 +206,8 @@ h1 {
         flex-direction: row;
         justify-content: space-between;
         text-align: left;
-        padding: 8px 2px;
-        gap: 12px;
+        padding: 5px 2px;
+        gap: 8px;
     }
 
     .info-row + .info-row {
