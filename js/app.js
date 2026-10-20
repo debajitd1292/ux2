@@ -155,21 +155,25 @@ function refresh(){
     }
 
     
-    badge.className = "badge";
+badge.className = "badge";
 
-    if(headerShift && headerShift !== "-" && headerShift !== "Select Name"){
+if (!selectedName) {
+    badge.classList.add("no-name-selected");
+}
 
-        let primary;
+if (headerShift && headerShift !== "-" && headerShift !== "Select Name") {
 
-        if(headerShift.includes("C")) primary = "C";
-        else if(headerShift.includes("B")) primary = "B";
-        else if(headerShift.includes("A")) primary = "A";
-        else primary = headerShift;
+    let primary;
 
-        if(primary === "O") primary = "OFF";
+    if (headerShift.includes("C")) primary = "C";
+    else if (headerShift.includes("B")) primary = "B";
+    else if (headerShift.includes("A")) primary = "A";
+    else primary = headerShift;
 
-        badge.classList.add(primary);
-    }
+    if (primary === "O") primary = "OFF";
+
+    badge.classList.add(primary);
+}
 
 
     render("today", today);
