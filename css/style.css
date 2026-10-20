@@ -835,9 +835,10 @@ body.dark .upcoming-training {
 
 /* 14. DARK MODE OVERRIDES */
 body.dark .training-item {
-    background: linear-gradient(135deg, #1e293b, #111827);
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+    border: 1px solid #496789;    
     border-left: 5px solid #60a5fa;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark .training-name {
@@ -858,9 +859,10 @@ body.dark .header {
 }
 
 body.dark .info-bar {
-    background: linear-gradient(135deg, #0f172a, #020617);
+    background: linear-gradient(135deg, #1e3a5f, #1e40af);
     color: #e2e8f0;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(147,197,253,0.22);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark .slider {
@@ -1075,8 +1077,10 @@ body.dark .production-past{
 }
 
 body.dark .production-card{
-    background:#111827;
-    box-shadow:0 4px 12px rgba(0,0,0,.5);
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+    border: 1px solid #496789;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark .production-card .section-title{
@@ -1474,7 +1478,7 @@ body.dark #trainingHeader,
 body.dark #productionPlanHeader {
     background: linear-gradient(135deg, #1e3a5f, #1d4ed8);
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark #productionPlanMonth {
@@ -1564,7 +1568,7 @@ body.dark .settings-details p span:first-child {
 body.dark #settingsHeader {
     background: linear-gradient(135deg, #1e3a5f, #1d4ed8);
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 @media (max-width: 360px) {
@@ -1585,6 +1589,7 @@ body.dark #page-others .settings-card > h3 {
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark #page-ims .ims-card {
@@ -1631,7 +1636,7 @@ body:not(.dark) #page-ims .ims-card > h3 {
     font-size: 17px;
     font-weight: 700;
     line-height: 1.4;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     box-sizing: border-box;
 }
 
@@ -1640,7 +1645,7 @@ body.dark #page-shifts #selectedTitle {
     background: linear-gradient(135deg, #1e3a5f, #263b59);
     color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 @media (max-width: 360px) {
@@ -1925,7 +1930,7 @@ body.dark #page-plant #plantHeader {
   background: linear-gradient(135deg, #1e3a5f, #263b59);
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 #page-plant #plantMajorCards {
@@ -2283,9 +2288,10 @@ body.dark #page-plant .plant-custom-message {
 }
 
 body.dark #page-production .production-grade-card {
-    background: linear-gradient(135deg, #1e293b, #111827);
-    border-left-color: #60a5fa;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+    border: 1px solid #496789;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark #page-production .production-grade-card h3 {
@@ -2688,6 +2694,7 @@ body.dark .holiday-card {
     background: linear-gradient(135deg, #263f60, #1e3350);
     color: #e2eaf5;
     border: 1px solid #496789;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 body.dark .holiday-title,
@@ -2829,6 +2836,7 @@ body.dark .today-message {
     background: linear-gradient(135deg, #263f60, #1e3350);
     color: #e2eaf5;
     border: 1px solid #496789;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 /* FORCE BIRTHDAY / ANNIVERSARY TEXT STYLING */
@@ -2867,4 +2875,46 @@ body.dark .today-message {
     flex: 0 0 auto;
     display: inline !important;
     opacity: 0.65;
+}
+
+
+/* 41. UNIFIED DARK BLUE THEME — ALL PAGES AND SECTIONS */
+body.dark {
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+}
+
+body.dark .card,
+body.dark .info-card,
+body.dark .info-bar,
+body.dark .section-header,
+body.dark .production-grade-card,
+body.dark .plant-page-card,
+body.dark .settings-card,
+body.dark .ims-card,
+body.dark .today-weather-summary,
+body.dark .weather-card,
+body.dark .holiday-card {
+    background: linear-gradient(135deg, #263f60, #1e3350);
+    color: #e2eaf5;
+    border-color: #496789;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+    background: #1e3350;
+    color: #e2eaf5;
+    border-color: #496789;
+}
+
+body.dark .card h3,
+body.dark .card h4,
+body.dark .info-card h3,
+body.dark .section-header,
+body.dark .holiday-title,
+body.dark .holiday-date,
+body.dark .holiday-date-main,
+body.dark .holiday-name {
+    color: #e2eaf5;
 }
