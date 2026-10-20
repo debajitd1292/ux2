@@ -222,13 +222,16 @@ h1 {
         gap: 0;
     }
 
-    .info-row {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-        padding: 5px 2px;
-        gap: 8px;
-    }
+    
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    padding: 2px 2px;
+    gap: 5px;
+    min-height: 28px;
+}
+
 
     .info-row + .info-row {
         border-left: none;
