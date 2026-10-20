@@ -51,7 +51,6 @@ body {
     overflow-x: hidden;
 }
 
-
 /* 02. HEADER & LOGO */
 /* FIXED BRANDING HEADER */
 .home-top-section {
@@ -167,13 +166,12 @@ h1 {
     border: 1px solid rgba(255,255,255,0.15);
 }
 
-
 /* 03. HOD / AREA IN-CHARGE */
 .info-bar {
     background: linear-gradient(135deg, #1f4e79, #163a5f);
     color: white;
-    margin: 6px 10px;
-    padding: 5px 10px;
+    margin: 10px;
+    padding: 10px 14px;
     border-radius: 12px;
 
     display: grid;
@@ -224,14 +222,13 @@ h1 {
         gap: 0;
     }
 
-.info-row {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
-    padding: 2px 2px;
-    gap: 5px;
-    min-height: 28px;
-}
+    .info-row {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 5px 2px;
+        gap: 8px;
+    }
 
     .info-row + .info-row {
         border-left: none;
@@ -258,7 +255,6 @@ h1 {
     flex: 1;
     min-width: 0;
 }
-
 
 /* 05. ALERTS */
 #alertSection {
@@ -2624,7 +2620,6 @@ body.dark #productionGradeSince {
     .weather-details {
         font-size: 10px;
         gap: 3px;
-        margin-top: 2px;
     }
 }
 
@@ -2731,7 +2726,6 @@ body.dark .holiday-name {
     font-size: 9px;
     line-height: 1.3;
     white-space: nowrap;
-    margin-top: 2px;
 }
 
 .weather-details strong {
@@ -3124,13 +3118,16 @@ body.dark #page-others .settings-card hr {
 }
 
 
-/* 35. LIGHT MODE — DARKER ITEM BORDERS
-   =========================================
-   IMS, TRAINING, PRODUCTION & PLANT
-   ========================================= */
+/* 35. LIGHT-MODE BORDER REFINEMENTS — PRESERVE STATUS ACCENTS
+   ==========================================================
+   Only outer borders are refined here. Left borders remain available
+   for running/shutdown, training-date and production-date status colours.
+   ========================================================== */
 
 body:not(.dark) .ims-section {
-    border-color: #b8c5d4;
+    border-top-color: #b8c5d4;
+    border-right-color: #b8c5d4;
+    border-bottom-color: #b8c5d4;
 }
 
 body:not(.dark) .ims-value {
@@ -3138,14 +3135,145 @@ body:not(.dark) .ims-value {
 }
 
 body:not(.dark) .training-item {
-    border-color: #b8c5d4;
+    border-top-color: #b8c5d4;
+    border-right-color: #b8c5d4;
+    border-bottom-color: #b8c5d4;
 }
 
 body:not(.dark) .production-table td {
-    border-color: #b8c5d4;
+    border-top-color: #b8c5d4;
+    border-bottom-color: #b8c5d4;
+}
+
+body:not(.dark) .production-table td:last-child {
+    border-right-color: #b8c5d4;
 }
 
 body:not(.dark) #page-plant .plant-major-card,
 body:not(.dark) #page-plant .plant-fpu-card {
-    border-color: #b8c5d4;
+    border-top-color: #b8c5d4;
+    border-right-color: #b8c5d4;
+    border-bottom-color: #b8c5d4;
+}
+
+/* TRAINING — PAST / TODAY / UPCOMING DATE TEXT */
+.past-training .training-date {
+    color: #9ca3af;
+}
+
+.today-training .training-date {
+    color: #15803d;
+}
+
+.upcoming-training .training-date {
+    color: #b45309;
+}
+
+body.dark .past-training .training-date {
+    color: #9ca3af;
+}
+
+body.dark .today-training .training-date {
+    color: #86efac;
+}
+
+body.dark .upcoming-training .training-date {
+    color: #fbbf24;
+}
+
+/* Keep status accents from being overwritten by the generic dark card rule. */
+body.dark .training-item.today-training {
+    border-left: 5px solid #22c55e !important;
+}
+
+body.dark .training-item.upcoming-training {
+    border-left: 5px solid #fbbf24 !important;
+}
+
+/* PRODUCTION — PAST / TODAY / UPCOMING DATE TEXT */
+.production-past .production-duration {
+    color: #9ca3af;
+}
+
+.production-today .production-duration {
+    color: #15803d;
+}
+
+.production-table tbody tr:not(.production-today):not(.production-past) .production-duration {
+    color: #b45309;
+}
+
+body.dark .production-past .production-duration {
+    color: #9ca3af;
+}
+
+.production-table tbody tr.production-past td:first-child {
+    border-left-color: #9ca3af;
+}
+
+body.dark .production-table tbody tr.production-past td:first-child {
+    border-left-color: #64748b;
+}
+
+body.dark .production-today .production-duration {
+    color: #86efac;
+}
+
+body.dark .production-table tbody tr:not(.production-today):not(.production-past) .production-duration {
+    color: #fbbf24;
+}
+
+/* PLANT — KEEP STATUS TEXT AND BORDER COLOURS IN BOTH THEMES */
+#page-plant .plant-major-card.plant-running .plant-status-text,
+#page-plant .plant-fpu-card.plant-fpu-inline .plant-status-text {
+    color: #15803d;
+}
+
+#page-plant .plant-major-card.plant-shutdown .plant-status-text,
+#page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text {
+    color: #dc2626;
+}
+
+#page-plant .plant-major-card.plant-unknown .plant-status-text,
+#page-plant .plant-fpu-card.plant-fpu-unknown .plant-status-text {
+    color: #64748b;
+}
+
+#page-plant .plant-fpu-card.plant-fpu-inline {
+    border-left-color: #16a34a;
+}
+
+#page-plant .plant-fpu-card.plant-fpu-standby {
+    border-left-color: #dc2626;
+}
+
+#page-plant .plant-fpu-card.plant-fpu-unknown {
+    border-left-color: #94a3b8;
+}
+
+body.dark #page-plant .plant-major-card.plant-running .plant-status-text,
+body.dark #page-plant .plant-fpu-card.plant-fpu-inline .plant-status-text {
+    color: #4ade80;
+}
+
+body.dark #page-plant .plant-major-card.plant-shutdown .plant-status-text,
+body.dark #page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text {
+    color: #f87171;
+}
+
+body.dark #page-plant .plant-major-card.plant-unknown .plant-status-text,
+body.dark #page-plant .plant-fpu-card.plant-fpu-unknown .plant-status-text {
+    color: #cbd5e1;
+}
+
+body.dark #page-plant .plant-fpu-card.plant-fpu-inline {
+    border-left-color: #22c55e;
+}
+
+body.dark #page-plant .plant-fpu-card.plant-fpu-standby {
+    border-left-color: #ef4444;
+}
+
+body.dark #page-plant .plant-fpu-card.plant-fpu-unknown {
+    border-left-color: #94a3b8;
 }
