@@ -143,8 +143,10 @@ function refresh(){
 
     const [headerDay, headerMonth, headerYear] = calendarToday.split("-");
 
+    
     document.getElementById("todayTitle").innerText =
-        `Today's Shift (${monthNames[parseInt(headerMonth, 10) - 1]} ${parseInt(headerDay, 10)}, ${headerYear})`;
+        `Operational Shift for ${monthNames[parseInt(headerMonth, 10) - 1]} ${parseInt(headerDay, 10)}, ${headerYear}`;
+
     
     let badge = document.getElementById("todayShiftBadge");
 
