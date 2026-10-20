@@ -155,25 +155,25 @@ function refresh(){
     }
 
     
-badge.className = "badge";
+    badge.className = "badge";
 
-if (!selectedName) {
-    badge.classList.add("no-name-selected");
-}
+    if (!selectedName) {
+        badge.classList.add("no-name-selected");
+    }
 
-if (headerShift && headerShift !== "-" && headerShift !== "Select Name") {
+    if (headerShift && headerShift !== "-" && headerShift !== "Select Name") {
 
     let primary;
 
-    if (headerShift.includes("C")) primary = "C";
-    else if (headerShift.includes("B")) primary = "B";
-    else if (headerShift.includes("A")) primary = "A";
-    else primary = headerShift;
+        if (headerShift.includes("C")) primary = "C";
+        else if (headerShift.includes("B")) primary = "B";
+        else if (headerShift.includes("A")) primary = "A";
+        else primary = headerShift;
 
-    if (primary === "O") primary = "OFF";
+        if (primary === "O") primary = "OFF";
 
-    badge.classList.add(primary);
-}
+        badge.classList.add(primary);
+    }
 
 
     render("today", today);
