@@ -3365,33 +3365,3 @@ body.dark .non-executive-badge {
     color: #fecdd3 !important;
     border-color: rgba(251, 113, 133, 0.55) !important;
 }
-
-
-/* Operational Shift Heading */
-#todayTitle {
-    display: block;
-    padding: 10px 14px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    background: linear-gradient(
-        135deg,
-        rgba(25, 118, 210, 0.10),
-        rgba(25, 118, 210, 0.04)
-    );
-    border: 1px solid rgba(25, 118, 210, 0.25);
-    color: #174ea6;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.4;
-}
-
-/* Dark Mode */
-body.dark #todayTitle {
-    background: linear-gradient(
-        135deg,
-        rgba(66, 133, 244, 0.20),
-        rgba(66, 133, 244, 0.08)
-    );
-    border-color: rgba(144, 202, 249, 0.30);
-    color: #bbdefb;
-}
