@@ -3277,3 +3277,8 @@ body.dark #page-plant .plant-fpu-card.plant-fpu-standby {
 body.dark #page-plant .plant-fpu-card.plant-fpu-unknown {
     border-left-color: #94a3b8;
 }
+
+/* FIX: Upcoming Training — Orange in Light Mode */
+body:not(.dark) .training-item.upcoming-training {
+    border-left: 5px solid #f59e0b !important;
+}
