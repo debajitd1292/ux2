@@ -3223,62 +3223,107 @@ body.dark .production-table tbody tr:not(.production-today):not(.production-past
     color: #fbbf24;
 }
 
-/* PLANT — KEEP STATUS TEXT AND BORDER COLOURS IN BOTH THEMES */
-#page-plant .plant-major-card.plant-running .plant-status-text,
+/* =========================================================
+   PLANT STATUS COLOURS — MAJOR EQUIPMENT & FPU
+   Major: Running = Green | Shutdown = Red
+   FPU: Running = Green | Standby = Grey
+   ========================================================= */
+
+/* MAJOR EQUIPMENT — STATUS TEXT */
+#page-plant .plant-major-card.plant-running .plant-status-text {
+    color: #15803d !important;
+}
+
+#page-plant .plant-major-card.plant-shutdown .plant-status-text {
+    color: #dc2626 !important;
+}
+
+#page-plant .plant-major-card.plant-unknown .plant-status-text {
+    color: #64748b !important;
+}
+
+/* FPU — STATUS TEXT */
 #page-plant .plant-fpu-card.plant-fpu-inline .plant-status-text {
-    color: #15803d;
+    color: #15803d !important;
 }
 
-#page-plant .plant-major-card.plant-shutdown .plant-status-text,
-#page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text {
-    color: #dc2626;
-}
-
-#page-plant .plant-major-card.plant-unknown .plant-status-text,
+#page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text,
 #page-plant .plant-fpu-card.plant-fpu-unknown .plant-status-text {
-    color: #64748b;
+    color: #64748b !important;
 }
 
+/* FPU — LEFT BORDER ACCENTS */
 #page-plant .plant-fpu-card.plant-fpu-inline {
-    border-left-color: #16a34a;
+    border-left-color: #16a34a !important;
 }
 
-#page-plant .plant-fpu-card.plant-fpu-standby {
-    border-left-color: #dc2626;
-}
-
+#page-plant .plant-fpu-card.plant-fpu-standby,
 #page-plant .plant-fpu-card.plant-fpu-unknown {
-    border-left-color: #94a3b8;
+    border-left-color: #94a3b8 !important;
 }
 
-body.dark #page-plant .plant-major-card.plant-running .plant-status-text,
+/* DARK MODE — MAJOR EQUIPMENT STATUS TEXT */
+body.dark #page-plant .plant-major-card.plant-running .plant-status-text {
+    color: #4ade80 !important;
+}
+
+body.dark #page-plant .plant-major-card.plant-shutdown .plant-status-text {
+    color: #f87171 !important;
+}
+
+body.dark #page-plant .plant-major-card.plant-unknown .plant-status-text {
+    color: #cbd5e1 !important;
+}
+
+/* DARK MODE — FPU STATUS TEXT */
 body.dark #page-plant .plant-fpu-card.plant-fpu-inline .plant-status-text {
-    color: #4ade80;
+    color: #4ade80 !important;
 }
 
-body.dark #page-plant .plant-major-card.plant-shutdown .plant-status-text,
-body.dark #page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text {
-    color: #f87171;
-}
-
-body.dark #page-plant .plant-major-card.plant-unknown .plant-status-text,
+body.dark #page-plant .plant-fpu-card.plant-fpu-standby .plant-status-text,
 body.dark #page-plant .plant-fpu-card.plant-fpu-unknown .plant-status-text {
-    color: #cbd5e1;
+    color: #cbd5e1 !important;
 }
 
+/* DARK MODE — FPU LEFT BORDER ACCENTS */
 body.dark #page-plant .plant-fpu-card.plant-fpu-inline {
-    border-left-color: #22c55e;
+    border-left-color: #22c55e !important;
 }
 
-body.dark #page-plant .plant-fpu-card.plant-fpu-standby {
-    border-left-color: #ef4444;
-}
-
+body.dark #page-plant .plant-fpu-card.plant-fpu-standby,
 body.dark #page-plant .plant-fpu-card.plant-fpu-unknown {
-    border-left-color: #94a3b8;
+    border-left-color: #94a3b8 !important;
 }
 
 /* FIX: Upcoming Training — Orange in Light Mode */
 body:not(.dark) .training-item.upcoming-training {
     border-left: 5px solid #f59e0b !important;
+}
+
+/* No name selected — neutral dark-grey badge */
+#todayShiftBadge.no-name-selected {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+    border: 1px solid #6b7280 !important;
+    box-shadow: none !important;
+}
+
+body.dark #todayShiftBadge.no-name-selected {
+    background: #374151 !important;
+    color: #ffffff !important;
+    border-color: #6b7280 !important;
+}
+
+/* Bottom Navigation — Border & Subtle Shadow */
+#bottomNav,
+.bottom-nav {
+    border: 1px solid #94a3b8 !important;
+    box-shadow: 0 -3px 12px rgba(15, 23, 42, 0.16) !important;
+}
+
+/* Dark Mode */
+body.dark #bottomNav,
+body.dark .bottom-nav {
+    border-color: #64748b !important;
+    box-shadow: 0 -3px 14px rgba(0, 0, 0, 0.35) !important;
 }
