@@ -156,6 +156,10 @@ function refresh(){
 
     badge.className = "badge";
 
+    if (!selectedName) {
+        badge.classList.add("no-name-selected");
+    }
+
     if(shift && shift !== "-" && shift !== "Select Name"){
 
     let primary;
