@@ -1,26 +1,19 @@
-
-/* =========================================================
-   PLANT STATUS MODULE
-   File: js/plant.js
-   CSV: updates/plant_status.csv
-   Refresh: Every 2 minutes + when tab becomes visible
-   ========================================================= */
-
 (function () {
   "use strict";
 
-  const CSV_URL =
-    "https://raw.githubusercontent.com/debajitd1292/ux2/main/updates/plant_status.csv";
+    const CSV_URL =
+      "https://raw.githubusercontent.com/debajitd1292/ppu/main/updates/plant_status.csv";
 
-  const REFRESH_INTERVAL = 2 * 60 * 1000;
+    const REFRESH_INTERVAL = 2 * 60 * 1000;
 
-  let lastGoodRows = [];
-  let refreshTimer = null;
-  let isRefreshing = false;
+    let lastGoodRows = [];
+    let refreshTimer = null;
+    let isRefreshing = false;
 
-  const $ = (id) => document.getElementById(id);
+    const $ = (id) => document.getElementById(id);
 
-  function parseCSV(text) {
+
+function parseCSV(text) {
     const rows = [];
     let row = [];
     let field = "";
@@ -80,10 +73,11 @@
       });
 
       return obj;
-    });
-  }
+  });
+}
 
-  function parseDate(value) {
+
+function parseDate(value) {
     if (!value) return null;
 
     // Expected CSV format: YYYY-MM-DD
@@ -108,9 +102,10 @@
 
     date.setHours(0, 0, 0, 0);
     return date;
-  }
+}
 
-  function formatDate(value) {
+
+function formatDate(value) {
     const date = parseDate(value);
     if (!date) return "";
 
@@ -121,37 +116,91 @@
     ][date.getMonth()];
 
     return `${day}-${month}-${date.getFullYear()}`;
-  }
+}
 
-  function daysBetween(startDate, endDate = new Date()) {
-    if (!startDate) return null;
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
 
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
+function parseEventDateTime(dateValue, timeValue) {
+    const date = parseDate(dateValue);
+    if (!date) return null;
 
-    return Math.max(
-      0,
-      Math.floor((end.getTime() - start.getTime()) / 86400000)
+    const time = (timeValue || "").trim();
+
+    if (time) {
+        const match = time.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+        if (!match) return null;
+
+        date.setHours(Number(match[1]), Number(match[2]), 0, 0);
+    }
+
+    return date;
+}
+
+
+function formatDuration(startDate, timeValue = "") {
+    if (!startDate) return "";
+
+    const start = parseEventDateTime(startDate, timeValue);
+    if (!start) return "";
+
+    const now = new Date();
+    const elapsedMs = Math.max(0, now.getTime() - start.getTime());
+
+    const hasTime = Boolean((timeValue || "").trim());
+
+    const days = Math.floor(elapsedMs / 86400000);
+
+    // When no time is supplied, retain whole-day display.
+    if (!hasTime) {
+        return `${days} day${days === 1 ? "" : "s"}`;
+    }
+
+    const hours = Math.floor(
+        (elapsedMs % 86400000) / 3600000
     );
-  }
 
-  function shiftText(shift) {
+    if (days === 0 && hours === 0) {
+        return "Less than 1 hour";
+    }
+
+    const parts = [];
+
+    if (days > 0) {
+        parts.push(`${days} day${days === 1 ? "" : "s"}`);
+    }
+
+    if (hours > 0) {
+        parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+    }
+
+    return parts.join(" & ");
+}
+
+
+function shiftText(shift) {
     if (!shift) return "";
 
     const cleaned = shift.trim().replace(/\s*shift$/i, "");
     return ` (${cleaned} Shift)`;
   }
 
-  function eventDateText(date, shift) {
+
+
+function eventDateText(date, time, shift) {
     if (!date) return "Date not available";
 
-    return formatDate(date) + shiftText(shift);
-  }
+    const formattedDate = formatDate(date);
+    const formattedTime = (time || "").trim();
 
-  function escapeHTML(value) {
+    const timeText = /^([01]\d|2[0-3]):([0-5]\d)$/.test(formattedTime)
+        ? `, ${formattedTime} hours`
+        : "";
+
+    return formattedDate + timeText + shiftText(shift);
+}
+
+
+function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
       "&": "&amp;",
       "<": "&lt;",
@@ -159,9 +208,10 @@
       '"': "&quot;",
       "'": "&#39;"
     })[ch]);
-  }
+}
 
-  function getRow(rows, type, name) {
+
+function getRow(rows, type, name) {
     return rows.find((row) =>
       (row.equipment_type || "").toLowerCase() === type.toLowerCase() &&
       (row.equipment_name || "").toLowerCase() === name.toLowerCase()
@@ -177,8 +227,15 @@
 function majorCard(row, name) {
   row = row || {};
 
-  const startup = parseDate(row.last_startup_date);
-  const shutdown = parseDate(row.last_shutdown_date);
+  const startup = parseEventDateTime(
+      row.last_startup_date,
+      row.last_startup_time
+  );
+
+  const shutdown = parseEventDateTime(
+      row.last_shutdown_date,
+      row.last_shutdown_time
+  );
 
   let status = "Status Undetermined";
   let statusClass = "plant-unknown";
@@ -192,23 +249,29 @@ function majorCard(row, name) {
       statusClass = "plant-running";
       eventLabel = "Last Startup";
       eventDate = eventDateText(
-        row.last_startup_date,
-        row.last_event_shift
+          row.last_startup_date,
+          row.last_startup_time,
+          row.last_event_shift
       );
 
-      const days = daysBetween(startup);
-      duration = `Continuous uptime: ${days} day${days === 1 ? "" : "s"}`;
-    } else {
+      duration = `Continuous uptime: ${formatDuration(
+          row.last_startup_date,
+          row.last_startup_time
+      )}`;
+      } else {
       status = "Shutdown";
       statusClass = "plant-shutdown";
       eventLabel = "Last Shutdown";
       eventDate = eventDateText(
-        row.last_shutdown_date,
-        row.last_event_shift
+          row.last_shutdown_date,
+          row.last_shutdown_time,
+          row.last_event_shift
       );
 
-      const days = daysBetween(shutdown);
-      duration = `Continuous downtime: ${days} day${days === 1 ? "" : "s"}`;
+      duration = `Continuous downtime: ${formatDuration(
+          row.last_shutdown_date,
+          row.last_shutdown_time
+      )}`;
     }
   } else if (startup && !shutdown) {
     eventLabel = "Last Startup";
@@ -245,46 +308,52 @@ function majorCard(row, name) {
 }
 
 
- 
-
 function fpuCard(row, name, pairStatus = null) {
-  row = row || {};
+    row = row || {};
 
-  const inlineDate = parseDate(row.last_taken_inline_date);
-  const regenDate = parseDate(row.last_regeneration_date);
-  const customStatus = (row.custom_status || "").trim();
-
-  let status = "Undetermined";
-  let statusClass = "plant-fpu-unknown";
-  let eventLabel = "";
-  let eventDate = "";
-
-  // Use pair-wise status when supplied; otherwise retain existing date logic.
-  if (pairStatus) {
-    status = pairStatus;
-  } else if (
-    inlineDate &&
-    regenDate &&
-    inlineDate.getTime() !== regenDate.getTime()
-  ) {
-    status = inlineDate > regenDate ? "Inline" : "Standby";
-  } else if (inlineDate && !regenDate) {
-    status = "Inline";
-  } else if (regenDate && !inlineDate) {
-    status = "Standby";
-  }
-
-  if (status === "Inline") {
-    statusClass = "plant-fpu-inline";
-    if (inlineDate) {
-      eventLabel = "Last Taken Inline";
-      eventDate = eventDateText(
+    const inlineDate = parseEventDateTime(
         row.last_taken_inline_date,
-        row.last_inline_shift
-      );
+        row.last_taken_inline_time
+    );
+
+    const regenDate = parseEventDateTime(
+        row.last_regeneration_date,
+        row.last_regeneration_time
+    );
+    const customStatus = (row.custom_status || "").trim();
+
+    let status = "Undetermined";
+    let statusClass = "plant-fpu-unknown";
+    let eventLabel = "";
+    let eventDate = "";
+
+    // Use pair-wise status when supplied; otherwise retain existing date logic.
+    if (pairStatus) {
+      status = pairStatus;
+    } else if (
+      inlineDate &&
+      regenDate &&
+      inlineDate.getTime() !== regenDate.getTime()
+    ) {
+      status = inlineDate > regenDate ? "Inline" : "Standby";
+    } else if (inlineDate && !regenDate) {
+      status = "Inline";
+    } else if (regenDate && !inlineDate) {
+      status = "Standby";
     }
-  } else if (status === "Standby") {
-    statusClass = "plant-fpu-standby";
+
+    if (status === "Inline") {
+      statusClass = "plant-fpu-inline";
+      if (inlineDate) {
+        eventLabel = "Last Taken Inline";
+        eventDate = eventDateText(
+          row.last_taken_inline_date,
+          row.last_taken_inline_time,
+          row.last_inline_shift
+        );
+    }
+    } else if (status === "Standby") {
+      statusClass = "plant-fpu-standby";
 
     // Prefer regeneration date for Standby; fall back to inline date.
     if (regenDate) {
@@ -293,12 +362,14 @@ function fpuCard(row, name, pairStatus = null) {
       : "Last Regenerated";
       eventDate = eventDateText(
         row.last_regeneration_date,
+        row.last_regeneration_time,
         row.last_regeneration_shift
       );
     } else if (inlineDate) {
       eventLabel = "Last Taken Inline";
       eventDate = eventDateText(
         row.last_taken_inline_date,
+        row.last_taken_inline_time,
         row.last_inline_shift
       );
     }
@@ -310,6 +381,7 @@ function fpuCard(row, name, pairStatus = null) {
       eventLabel = "Last Taken Inline";
       eventDate = eventDateText(
         row.last_taken_inline_date,
+        row.last_taken_inline_time,
         row.last_inline_shift
       );
     } else if (regenDate && !inlineDate) {
@@ -318,15 +390,19 @@ function fpuCard(row, name, pairStatus = null) {
       : "Last Regenerated";
       eventDate = eventDateText(
         row.last_regeneration_date,
+        row.last_regeneration_time,
         row.last_regeneration_shift
       );
     }
   }
 
-  const daysInline =
-  status === "Inline" && inlineDate
-    ? daysBetween(inlineDate)
-    : null;
+  const durationInline =
+    status === "Inline" && inlineDate
+        ? formatDuration(
+            row.last_taken_inline_date,
+            row.last_taken_inline_time
+        )
+        : null;
 
   return `
     <article class="plant-fpu-card ${statusClass}">
@@ -347,15 +423,16 @@ function fpuCard(row, name, pairStatus = null) {
           : ""
       }
       ${
-        daysInline !== null
-          ? `<div class="plant-duration">Days Inline: ${daysInline}</div>`
+        durationInline !== null
+          ? `<div class="plant-duration">Inline: ${durationInline}</div>`
           : ""
       }
     </article>
   `;
 }
 
-  function render(rows) {
+
+function render(rows) {
     const majorContainer = $("plantMajorCards");
     const fpuContainer = $("plantFpuCards");
 
@@ -394,8 +471,15 @@ function fpuCard(row, name, pairStatus = null) {
       const rowA = getRow(rows, "fpu", nameA) || {};
       const rowB = getRow(rows, "fpu", nameB) || {};
 
-      const dateA = parseDate(rowA.last_taken_inline_date);
-      const dateB = parseDate(rowB.last_taken_inline_date);
+      const dateA = parseEventDateTime(
+          rowA.last_taken_inline_date,
+          rowA.last_taken_inline_time
+      );
+
+      const dateB = parseEventDateTime(
+          rowB.last_taken_inline_date,
+          rowB.last_taken_inline_time
+      );
 
       let statusA = null;
       let statusB = null;
@@ -457,7 +541,7 @@ function fpuCard(row, name, pairStatus = null) {
     }
   }
 
-  function startPlantStatus() {
+function startPlantStatus() {
     refreshPlantStatus();
 
     if (refreshTimer) {
