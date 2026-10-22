@@ -3365,3 +3365,101 @@ body.dark .non-executive-badge {
     color: #fecdd3 !important;
     border-color: rgba(251, 113, 133, 0.55) !important;
 }
+
+/* =========================================================
+   OFF DAY COUNTER — compact single-line layout
+   ========================================================= */
+#page-shifts .off-day-counter {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(100, 116, 139, 0.24);
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+#page-shifts .off-day-counter-heading {
+    margin: 0 0 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #334155;
+}
+
+#page-shifts .off-day-counter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+}
+
+#page-shifts .off-day-count-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid rgba(100, 116, 139, 0.22);
+    border-radius: 7px;
+    background: rgba(148, 163, 184, 0.06);
+}
+
+#page-shifts .off-day-count-current {
+    grid-column: 1 / -1;
+}
+
+#page-shifts .off-day-count-label {
+    min-width: 0;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 500;
+    color: #475569;
+}
+
+#page-shifts .off-day-count-value {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+#page-shifts .off-day-count-value.is-within-limit { color: #15803d; }
+#page-shifts .off-day-count-value.is-over-limit { color: #dc2626; }
+#page-shifts .off-day-count-value.is-unavailable { color: #64748b; }
+
+#page-shifts .off-day-warning {
+    margin-top: 7px;
+    color: #dc2626;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+#page-shifts .off-day-warning[hidden] { display: none !important; }
+
+#page-shifts .off-day-rotational-note {
+    margin-top: 7px;
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+body.dark #page-shifts .off-day-counter-heading { color: #dbeafe; }
+body.dark #page-shifts .off-day-count-item {
+    border-color: rgba(148, 163, 184, 0.20);
+    background: rgba(148, 163, 184, 0.07);
+}
+body.dark #page-shifts .off-day-count-label { color: #cbd5e1; }
+body.dark #page-shifts .off-day-count-value.is-within-limit { color: #4ade80; }
+body.dark #page-shifts .off-day-count-value.is-over-limit { color: #f87171; }
+body.dark #page-shifts .off-day-count-value.is-unavailable { color: #94a3b8; }
+body.dark #page-shifts .off-day-warning { color: #f87171; }
+body.dark #page-shifts .off-day-rotational-note { color: #60a5fa; }
+
+@media (max-width: 360px) {
+    #page-shifts .off-day-counter-grid { gap: 4px; }
+    #page-shifts .off-day-count-item { padding: 5px 6px; gap: 4px; }
+    #page-shifts .off-day-count-label,
+    #page-shifts .off-day-count-value { font-size: 10px; }
+}
