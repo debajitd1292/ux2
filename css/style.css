@@ -434,6 +434,7 @@ select:focus, input:focus {
 }
 .G { background:#e53935; }
 .OFF { background:#1b5e20; }
+.H { background:linear-gradient(135deg, #22c55e, #15803d); color:#ffffff; }
 
 .D { background:#43a047; }
 .N { background:#6b7280; color:white; }
@@ -456,6 +457,7 @@ select:focus, input:focus {
 }
 .badge.G { background:#e53935; }
 .badge.OFF { background:#1b5e20; }
+.badge.H { background:linear-gradient(135deg, #22c55e, #15803d); color:#ffffff; }
 
 .badge.D { background:#43a047; }
 .badge.N { background:#6b7280; color:white; }
