@@ -1,7 +1,7 @@
 equipment_type,equipment_name,last_startup_date,last_startup_time,last_shutdown_date,last_shutdown_time,last_taken_inline_date,last_taken_inline_time,last_regeneration_date,last_regeneration_time,last_event_shift,last_inline_shift,last_regeneration_shift,custom_status
 major,Reactor,2026-10-17,06:00,2026-10-17,11:00,,,,,,,,
 major,Extruder,2026-10-18,06:00,2026-10-18,10:23,,,,,,,,
-fpu,Dryer-A,,,,,2026-07-20,20:00,2026-07-20,21:00,,,,Ready
+fpu,Dryer-A,,,,,2026-07-20,18:00,2026-07-20,21:00,,,,Ready
 fpu,Dryer-B,,,,,2026-07-20,21:00,2026-07-20,20:15,,B,,
 fpu,Treater-A,,,,,2026-05-20,,2026-08-12,,,A,,Ready
 fpu,Treater-B,,,,,2026-08-09,,2026-05-25,,,A,,
