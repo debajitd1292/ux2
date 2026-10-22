@@ -10,9 +10,11 @@ let nonExecSeniorityOrder = [];
 
 const shiftLabels = {
 "A":"A Shift","B":"B Shift","C":"C Shift",
-"G":"General","OFF":"Rest / Off / Holiday",
+"G":"General","OFF":"Rest / Off",
+"H":"Holiday",
 "D":"Day Shift","N":"Night Shift",
-"L":"Leave","T":"Training / Tour"
+"L":"Leave",
+"T":"Training / Tour"
 };
 
 
@@ -216,7 +218,7 @@ function render(id,date){
     }
 
     /* MAIN */
-    ["A","B","C","G","OFF","L","T"].forEach(s=>{
+    ["A","B","C","G","OFF","H","L","T"].forEach(s=>{
 
     let list=shifts[s]||[];
     if(list.length === 0) return;
@@ -288,7 +290,7 @@ function render(id,date){
 
     box.innerHTML += `<hr><div class="section-header nonexec-header">Non-Executive</div>`;
 
-    ["A","B","C","G","OFF","L","T","D","N"].forEach(s=>{
+    ["A","B","C","G","OFF","H","L","T","D","N"].forEach(s=>{
 
         let list = nonExecShifts[s] || [];
         if(list.length === 0) return;
