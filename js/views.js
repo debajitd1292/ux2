@@ -406,7 +406,7 @@ function renderOffDayCounterMarkup() {
             ⚠️ More than 10 working days between OFF days in the current month
         </div>
         <div class="off-day-warning" id="offDayLimitWarning" hidden>
-            ⚠️ Your Rest/OFF count exceeds the prescribed limit, please contact AIC for necessary guidance
+            ⚠️ Your Rest / OFF count exceeds the prescribed limit, please contact AIC for necessary guidance
         </div>
         <div class="off-day-rotational-note">
             *Applicable only to employees working in Rotational shifts
