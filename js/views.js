@@ -152,6 +152,8 @@ function renderNext7Days(){
 
     if(!box) return;
 
+    renderOffDayCounter();
+
     if(!header || header.length === 0 || !data || data.length === 0){
 
         box.innerHTML =
@@ -246,3 +248,241 @@ function renderNext7Days(){
     box.innerHTML = html;
 }
 
+/* =========================================================
+   OFF DAY COUNTER — MONTHLY + CALENDAR-PERIOD TOTALS
+   ========================================================= */
+
+const offDayMonthCache = new Map();
+let offDayCounterRenderToken = 0;
+
+function offDayMonthCacheKey(category, year, month) {
+    return `${category}-${year}-${String(month).padStart(2, "0")}`;
+}
+
+function getOffDayMonthSchedule(category, year, month) {
+    const key = offDayMonthCacheKey(category, year, month);
+
+    if (offDayMonthCache.has(key)) {
+        return offDayMonthCache.get(key);
+    }
+
+    const monthKey =
+        String(month).padStart(2, "0") +
+        String(year).slice(-2);
+
+    const folder = category === "nonexec" ? "nonexec" : "exec";
+    const prefix = category === "nonexec" ? "shift_nonexec_" : "shift_exec_";
+    const version = (typeof DATA_VERSION !== "undefined") ? DATA_VERSION : Date.now();
+    const url = `${baseUrl}${folder}/${prefix}${monthKey}.csv?v=${version}`;
+
+    // Cache raw month data, not employee-specific counts.
+    const request = fetchCSV(url, true).then(text => {
+        const rows = parseCSV(text);
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        if (!rows.length || !rows[0]) {
+            return { complete: false, header: [], rows: [], expectedDates: [] };
+        }
+
+        const monthHeader = rows[0].map(value => String(value || "").trim());
+        const expectedDates = [];
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            expectedDates.push(
+                `${String(day).padStart(2, "0")}-${String(month).padStart(2, "0")}-${year}`
+            );
+        }
+
+        const hasFullDateColumns = expectedDates.every(date => monthHeader.includes(date));
+
+        return {
+            complete: hasFullDateColumns,
+            header: monthHeader,
+            rows,
+            expectedDates
+        };
+    }).catch(error => {
+        console.warn("OFF-day counter: monthly schedule unavailable", key, error);
+        return { complete: false, header: [], rows: [], expectedDates: [] };
+    });
+
+    offDayMonthCache.set(key, request);
+    return request;
+}
+
+function getOffDayEmployeeMonthData(monthData, employeeName) {
+    if (!monthData || !monthData.complete) {
+        return { complete: false, offCount: 0, shifts: [] };
+    }
+
+    const employeeRow = monthData.rows.slice(1).find(row =>
+        String(row?.[0] || "").trim() === employeeName
+    );
+
+    if (!employeeRow) {
+        return { complete: false, offCount: 0, shifts: [] };
+    }
+
+    const shifts = monthData.expectedDates.map(date => {
+        const column = monthData.header.indexOf(date);
+        return String(employeeRow[column] || "").trim().toUpperCase();
+    });
+
+    return {
+        complete: true,
+        offCount: shifts.filter(shift => shift === "OFF" || shift === "O").length,
+        shifts
+    };
+}
+
+function isOffDayCounterWorkingShift(rawShift) {
+    const value = String(rawShift || "").trim().toUpperCase();
+
+    if (!value || value === "OFF" || value === "O" || value === "L" || value === "T") {
+        return false;
+    }
+
+    // A/B/C, General (G), Day (D), and Night (N) are duty codes.
+    return /[ABCGDN]/.test(value);
+}
+
+function hasMoreThanTenWorkingDaysBetweenOffDays(shifts) {
+    let hasSeenOff = false;
+    let workingDaysSinceOff = 0;
+
+    for (const rawShift of shifts) {
+        const value = String(rawShift || "").trim().toUpperCase();
+        const isOff = value === "OFF" || value === "O";
+
+        if (isOff) {
+            if (hasSeenOff && workingDaysSinceOff > 10) {
+                return true;
+            }
+
+            hasSeenOff = true;
+            workingDaysSinceOff = 0;
+            continue;
+        }
+
+        if (hasSeenOff && isOffDayCounterWorkingShift(value)) {
+            workingDaysSinceOff++;
+        }
+    }
+
+    return false;
+}
+
+function renderOffDayCounterMarkup() {
+    const periods = [
+        { id: "current", label: "Current Month", limit: 8, full: true },
+        { id: "mar", label: "Jan to Mar", limit: 23 },
+        { id: "jun", label: "Jan to Jun", limit: 46 },
+        { id: "sep", label: "Jan to Sep", limit: 69 },
+        { id: "dec", label: "Jan to Dec", limit: 92 }
+    ];
+
+    const itemMarkup = periods.map(period => `
+        <div class="off-day-count-item ${period.full ? "off-day-count-current" : ""}">
+            <span class="off-day-count-label">${period.label}</span>
+            <span class="off-day-count-value is-unavailable" id="offDayCount-${period.id}">— / ${period.limit}</span>
+        </div>
+    `).join("");
+
+    return `
+        <div class="off-day-counter-heading">OFF Day Counter</div>
+        <div class="off-day-counter-grid">${itemMarkup}</div>
+        <div class="off-day-warning" id="offDayGapWarning" hidden>
+            ⚠️ More than 10 working days between OFF days in the current month.
+        </div>
+        <div class="off-day-warning" id="offDayLimitWarning" hidden>
+            ⚠️ Your OFF-day count exceeds the prescribed limit, please contact AIC for necessary guidance.
+        </div>
+        <div class="off-day-rotational-note">
+            Applicable only to employees working in rotational shifts.
+        </div>
+    `;
+}
+
+function setOffDayCounterValue(id, count, limit, complete) {
+    const element = document.getElementById(`offDayCount-${id}`);
+    if (!element) return;
+
+    element.classList.remove("is-within-limit", "is-over-limit", "is-unavailable");
+
+    if (!complete || count === null || count === undefined) {
+        element.textContent = `— / ${limit}`;
+        element.classList.add("is-unavailable");
+        return;
+    }
+
+    element.textContent = `${count} / ${limit}`;
+    element.classList.add(count > limit ? "is-over-limit" : "is-within-limit");
+}
+
+async function renderOffDayCounter() {
+    const box = document.getElementById("offDayCounter");
+    if (!box) return;
+
+    box.innerHTML = renderOffDayCounterMarkup();
+
+    const selectedEmployee = String(selectedName || "").trim();
+    const category = document.getElementById("categorySelector")?.value || "";
+    const now = new Date();
+    const year = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+    const renderToken = ++offDayCounterRenderToken;
+
+    if (!selectedEmployee || !category) return;
+
+    // Complete calendar-year schedule totals, including future scheduled OFF days.
+    const monthlyData = await Promise.all(
+        Array.from({ length: 12 }, (_, index) =>
+            getOffDayMonthSchedule(category, year, index + 1)
+        )
+    );
+
+    if (renderToken !== offDayCounterRenderToken) return;
+
+    const employeeMonths = monthlyData.map(monthData =>
+        getOffDayEmployeeMonthData(monthData, selectedEmployee)
+    );
+    const currentSchedule = employeeMonths[currentMonth - 1];
+
+    const periods = [
+        { id: "current", limit: 8, months: [currentMonth] },
+        { id: "mar", limit: 23, months: [1, 2, 3] },
+        { id: "jun", limit: 46, months: [1, 2, 3, 4, 5, 6] },
+        { id: "sep", limit: 69, months: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+        { id: "dec", limit: 92, months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
+    ];
+
+    let anyOverLimit = false;
+
+    for (const period of periods) {
+        const monthData = period.months.map(month => employeeMonths[month - 1]);
+        const complete = monthData.every(item => item && item.complete);
+        const count = complete
+            ? monthData.reduce((total, item) => total + item.offCount, 0)
+            : null;
+
+        setOffDayCounterValue(period.id, count, period.limit, complete);
+
+        if (complete && count > period.limit) {
+            anyOverLimit = true;
+        }
+    }
+
+    const gapWarning = document.getElementById("offDayGapWarning");
+    if (gapWarning) {
+        gapWarning.hidden = !(
+            currentSchedule &&
+            currentSchedule.complete &&
+            hasMoreThanTenWorkingDaysBetweenOffDays(currentSchedule.shifts)
+        );
+    }
+
+    const limitWarning = document.getElementById("offDayLimitWarning");
+    if (limitWarning) {
+        limitWarning.hidden = !anyOverLimit;
+    }
+}
