@@ -1,7 +1,3 @@
-// ===============================
-// DATE & UPCOMING SHIFT VIEWS
-// ===============================
-
 async function renderSelected(){
 
     let val = document.getElementById("datePicker").value;
@@ -93,7 +89,12 @@ async function renderSelected(){
 
                 data = mergeShiftData(
                     selectedExecData,
-                    data
+                    data,
+                    null,
+                    [
+                        new Date(d.getFullYear(), d.getMonth(), 1),
+                        null
+                    ]
                 );
 
                 header =
@@ -111,7 +112,12 @@ async function renderSelected(){
 
                 nonExecData = mergeShiftData(
                     selectedNonExecData,
-                    nonExecData
+                    nonExecData,
+                    null,
+                    [
+                        new Date(d.getFullYear(), d.getMonth(), 1),
+                        null
+                    ]
                 );
 
                 nonExecHeader =
