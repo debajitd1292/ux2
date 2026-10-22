@@ -286,20 +286,32 @@ function getOffDayMonthSchedule(category, year, month) {
 
         const monthHeader = rows[0].map(value => String(value || "").trim());
         const expectedDates = [];
+        const dayColumns = [];
 
         for (let day = 1; day <= daysInMonth; day++) {
-            expectedDates.push(
-                `${String(day).padStart(2, "0")}-${String(month).padStart(2, "0")}-${year}`
-            );
+            const fullDate = `${String(day).padStart(2, "0")}-${String(month).padStart(2, "0")}-${year}`;
+            const shortDate = `${day}-${month}-${year}`;
+            const dayHeader = String(day);
+            const paddedDayHeader = String(day).padStart(2, "0");
+
+            expectedDates.push(fullDate);
+
+            let column = monthHeader.indexOf(fullDate);
+            if (column === -1) column = monthHeader.indexOf(shortDate);
+            if (column === -1) column = monthHeader.indexOf(dayHeader);
+            if (column === -1) column = monthHeader.indexOf(paddedDayHeader);
+
+            dayColumns.push(column);
         }
 
-        const hasFullDateColumns = expectedDates.every(date => monthHeader.includes(date));
+        const hasAllDayColumns = dayColumns.every(column => column !== -1);
 
         return {
-            complete: hasFullDateColumns,
+            complete: hasAllDayColumns,
             header: monthHeader,
             rows,
-            expectedDates
+            expectedDates,
+            dayColumns
         };
     }).catch(error => {
         console.warn("OFF-day counter: monthly schedule unavailable", key, error);
@@ -323,10 +335,9 @@ function getOffDayEmployeeMonthData(monthData, employeeName) {
         return { complete: false, offCount: 0, shifts: [] };
     }
 
-    const shifts = monthData.expectedDates.map(date => {
-        const column = monthData.header.indexOf(date);
-        return String(employeeRow[column] || "").trim().toUpperCase();
-    });
+    const shifts = monthData.dayColumns.map(column =>
+        String(employeeRow[column] || "").trim().toUpperCase()
+    );
 
     return {
         complete: true,
@@ -448,12 +459,15 @@ async function renderOffDayCounter() {
     );
     const currentSchedule = employeeMonths[currentMonth - 1];
 
+    const throughMonth = endMonth =>
+        Array.from({ length: Math.min(endMonth, currentMonth) }, (_, index) => index + 1);
+
     const periods = [
         { id: "current", limit: 8, months: [currentMonth] },
-        { id: "mar", limit: 23, months: [1, 2, 3] },
-        { id: "jun", limit: 46, months: [1, 2, 3, 4, 5, 6] },
-        { id: "sep", limit: 69, months: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
-        { id: "dec", limit: 92, months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
+        { id: "mar", limit: 23, months: throughMonth(3) },
+        { id: "jun", limit: 46, months: throughMonth(6) },
+        { id: "sep", limit: 69, months: throughMonth(9) },
+        { id: "dec", limit: 92, months: throughMonth(12) }
     ];
 
     let anyOverLimit = false;
