@@ -403,13 +403,13 @@ function renderOffDayCounterMarkup() {
         <div class="off-day-counter-heading">OFF Day Counter</div>
         <div class="off-day-counter-grid">${itemMarkup}</div>
         <div class="off-day-warning" id="offDayGapWarning" hidden>
-            ⚠️ More than 10 working days between OFF days in the current month.
+            ⚠️ More than 10 working days between OFF days in the current month
         </div>
         <div class="off-day-warning" id="offDayLimitWarning" hidden>
-            ⚠️ Your OFF-day count exceeds the prescribed limit, please contact AIC for necessary guidance.
+            ⚠️ Your Rest/OFF count exceeds the prescribed limit, please contact AIC for necessary guidance
         </div>
         <div class="off-day-rotational-note">
-            Applicable only to employees working in rotational shifts.
+            *Applicable only to employees working in Rotational shifts
         </div>
     `;
 }
