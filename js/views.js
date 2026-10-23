@@ -146,26 +146,210 @@ async function renderSelected(){
 
 
 
+/* =========================================================
+   ECO & LEAVE COUNTER — CALENDAR YEAR TO CURRENT DATE
+   ========================================================= */
+
+let ecoLeaveRenderToken = 0;
+
+function renderEcoLeaveCounterMarkup() {
+    return `
+        <div class="eco-leave-grid">
+            <div class="eco-leave-item eco-card">
+                <span class="eco-leave-label">Total ECO</span>
+                <span class="eco-leave-value" id="totalEcoValue">— / 26</span>
+            </div>
+            <div class="eco-leave-item leave-card">
+                <span class="eco-leave-label">Total Leaves</span>
+                <span class="eco-leave-value" id="totalLeaveValue">—</span>
+            </div>
+        </div>
+    `;
+}
+
+async function renderEcoLeaveCounter() {
+    const box = document.getElementById("ecoLeaveCounter");
+    if (!box) return;
+
+    const employee = String(selectedName || "").trim();
+    const category = document.getElementById("categorySelector")?.value || "";
+    const token = ++ecoLeaveRenderToken;
+
+    if (!employee || !category) {
+        box.style.display = "none";
+        box.innerHTML = "";
+        return;
+    }
+
+    box.style.display = "";
+    box.innerHTML = renderEcoLeaveCounterMarkup();
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const currentMonth = now.getMonth() + 1;
+    const today = now.getDate();
+
+    const monthlyData = await Promise.all(
+        Array.from({ length: currentMonth }, (_, index) =>
+            getOffDayMonthSchedule(category, year, index + 1)
+        )
+    );
+
+    if (token !== ecoLeaveRenderToken) return;
+    if (String(selectedName || "").trim() !== employee) return;
+
+    let ecoTotal = 0;
+    let leaveTotal = 0;
+    let complete = true;
+
+    const specialDates = new Set([
+        `${year}-01-26`,
+        `${year}-08-15`,
+        `${year}-10-02`
+    ]);
+
+    for (let monthIndex = 0; monthIndex < currentMonth; monthIndex++) {
+        const monthData = monthlyData[monthIndex];
+
+        if (!monthData || !monthData.complete) {
+            complete = false;
+            break;
+        }
+
+        const employeeRow = monthData.rows.slice(1).find(row =>
+            String(row?.[0] || "").trim() === employee
+        );
+
+        if (!employeeRow) {
+            complete = false;
+            break;
+        }
+
+        const month = monthIndex + 1;
+        const daysToCount = month === currentMonth
+            ? today
+            : new Date(year, month, 0).getDate();
+
+        for (let day = 1; day <= daysToCount; day++) {
+            const column = monthData.dayColumns[day - 1];
+            const shift = String(employeeRow[column] || "")
+                .trim()
+                .toUpperCase();
+
+            const dateKey =
+                `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+            if (shift === "L") {
+                leaveTotal++;
+            }
+
+            if (!shift || shift === "-" || shift === "L" || shift === "T") {
+                continue;
+            }
+
+            const isOff = shift === "OFF" || shift === "O";
+
+            const dateStr =
+                `${String(day).padStart(2, "0")}-${String(month).padStart(2, "0")}-${year}`;
+
+            const holiday = typeof holidays !== "undefined"
+                ? holidays.find(h => h.date === dateStr)
+                : null;
+
+            const isGH = Boolean(holiday && holiday.type === "GH");
+            const isRH = Boolean(holiday && holiday.type === "RH");
+            const isSpecialDate = specialDates.has(dateKey);
+
+            const abcCount = new Set(
+                shift.match(/[ABC]/g) || []
+            ).size;
+
+            if (isSpecialDate) {
+                if (isOff) {
+                    continue;
+                }
+                ecoTotal += abcCount * 2;
+                continue;
+            }
+
+            if (isGH) {
+                if (isOff) {
+                    ecoTotal += 1;
+                } else {
+                    ecoTotal += abcCount;
+                }
+                continue;
+            }
+
+            // Normal days and RH: one shift = 0 ECO,
+            // two shifts = 1 ECO, three shifts = 2 ECO.
+            // RH follows normal-day rules.
+            if (isRH || !isGH) {
+                if (!isOff) {
+                    ecoTotal += Math.max(0, abcCount - 1);
+                }
+            }
+        }
+    }
+
+    if (token !== ecoLeaveRenderToken) return;
+
+    const ecoElement = document.getElementById("totalEcoValue");
+    const leaveElement = document.getElementById("totalLeaveValue");
+
+    if (!complete) {
+        if (ecoElement) ecoElement.textContent = "— / 26";
+        if (leaveElement) leaveElement.textContent = "—";
+        return;
+    }
+
+    if (ecoElement) {
+        ecoElement.textContent = `${ecoTotal} / 26`;
+        ecoElement.classList.toggle("eco-over-limit", ecoTotal > 26);
+    }
+
+    if (leaveElement) {
+        leaveElement.textContent = String(leaveTotal);
+    }
+}
+
+
+
 function renderNext7Days(){
 
     const box = document.getElementById("next7Days");
 
     if(!box) return;
 
-    renderOffDayCounter();
+    const offCounter = document.getElementById("offDayCounter");
+    const ecoCounter = document.getElementById("ecoLeaveCounter");
 
-    if(!header || header.length === 0 || !data || data.length === 0){
+    if (!selectedName) {
+        if (offCounter) {
+            offCounter.style.display = "none";
+            offCounter.innerHTML = "";
+        }
+
+        if (ecoCounter) {
+            ecoCounter.style.display = "none";
+            ecoCounter.innerHTML = "";
+        }
 
         box.innerHTML =
-            "<div style='color:#777;font-weight:bold;'>Shift schedule is not available</div>";
+            "<div style='color:#777;'>Select name to view shifts</div>";
 
         return;
     }
 
-    if(!selectedName){
+    if (offCounter) offCounter.style.display = "";
+    if (ecoCounter) ecoCounter.style.display = "";
 
+    renderOffDayCounter();
+    renderEcoLeaveCounter();
+
+    if (!header || header.length === 0 || !data || data.length === 0) {
         box.innerHTML =
-            "<div style='color:#777;'>Select name to view shifts</div>";
+            "<div style='color:#777;font-weight:bold;'>Shift schedule is not available</div>";
 
         return;
     }
