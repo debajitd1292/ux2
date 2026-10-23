@@ -685,3 +685,22 @@ async function renderOffDayCounter() {
         limitWarning.hidden = !anyOverLimit;
     }
 }
+
+
+
+/* =========================================================
+   AUTO-REFRESH — SHIFT CALENDAR & COUNTERS
+   Refresh every 5 minutes
+   ========================================================= */
+
+setInterval(() => {
+    if (typeof renderNext7Days !== "function") return;
+
+    // Clear cached monthly schedules so updated CSV data is fetched.
+    if (typeof offDayMonthCache !== "undefined") {
+        offDayMonthCache.clear();
+    }
+
+    // Re-render the calendar and both counters.
+    renderNext7Days();
+}, 5 * 60 * 1000);
