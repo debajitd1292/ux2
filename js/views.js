@@ -154,6 +154,7 @@ let ecoLeaveRenderToken = 0;
 
 function renderEcoLeaveCounterMarkup() {
     return `
+        <div class="eco-leave-heading">ECO &amp; Leaves till date</div>
         <div class="eco-leave-grid">
             <div class="eco-leave-item eco-card">
                 <span class="eco-leave-label">Total ECO</span>
@@ -232,9 +233,12 @@ async function renderEcoLeaveCounter() {
 
         for (let day = 1; day <= daysToCount; day++) {
             const column = monthData.dayColumns[day - 1];
-            const shift = String(employeeRow[column] || "")
+            const rawShift = String(employeeRow[column] || "")
                 .trim()
                 .toUpperCase();
+
+            const hasExtraEco = rawShift.includes("*");
+            const shift = rawShift.replace(/\*/g, "").trim();
 
             const dateKey =
                 `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -265,29 +269,25 @@ async function renderEcoLeaveCounter() {
             ).size;
 
             if (isSpecialDate) {
-                if (isOff) {
-                    continue;
+                if (!isOff) {
+                    ecoTotal += abcCount * 2;
                 }
-                ecoTotal += abcCount * 2;
-                continue;
-            }
-
-            if (isGH) {
+            } else if (isGH) {
                 if (isOff) {
+                    ecoTotal += 1;
+                } else if (shift === "G") {
                     ecoTotal += 1;
                 } else {
                     ecoTotal += abcCount;
                 }
-                continue;
+            } else if (!isOff) {
+            // Normal days and RH
+                ecoTotal += Math.max(0, abcCount - 1);
             }
 
-            // Normal days and RH: one shift = 0 ECO,
-            // two shifts = 1 ECO, three shifts = 2 ECO.
-            // RH follows normal-day rules.
-            if (isRH || !isGH) {
-                if (!isOff) {
-                    ecoTotal += Math.max(0, abcCount - 1);
-                }
+            // Asterisk adds one extra ECO, regardless of day type.
+            if (hasExtraEco) {
+                ecoTotal += 1;
             }
         }
     }
@@ -402,6 +402,7 @@ function renderNext7Days(){
         const dateStr = `${dd}-${mm}-${year}`;
 
         const rawShift = getShift(dateStr, selectedName) || "-";
+        const displayShift = rawShift.replace(/\*/g, "");
 
         let shiftClass;
 
@@ -410,7 +411,7 @@ function renderNext7Days(){
         }else if(rawShift === "OFF"){
             shiftClass = "OFF";
         }else{
-            shiftClass = rawShift.match(/[A-Z]/)?.[0] || "";
+            shiftClass = displayShift.match(/[A-Z]/)?.[0] || "";
         }
 
         const isToday = day === todayDate;
@@ -419,7 +420,7 @@ function renderNext7Days(){
             <div class="calendar-day ${isToday ? "calendar-today" : ""}">
                 <div class="calendar-date">${day}</div>
                 <div class="calendar-shift">
-                    <span class="day-shift ${shiftClass}">${rawShift}</span>
+                    <span class="day-shift ${shiftClass}">${displayShift}</span>
                 </div>
             </div>
         `;
