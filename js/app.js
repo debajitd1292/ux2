@@ -124,6 +124,7 @@ function init(){
     refresh(); 
 }
 
+
 function refresh(){
     // Header capsule: follows calendar date, changing at midnight
     let calendarToday = formatDate(new Date());
@@ -156,13 +157,12 @@ function refresh(){
 
     let badge = document.getElementById("todayShiftBadge");
 
-        if(!selectedName){
-    badge.innerText = "Select a name to view shift";
-        }else{
-    badge.innerText = "Today's Shift: " + headerShift;
+    if (!selectedName) {
+        badge.innerText = "—";
+    } else {
+        badge.innerText = headerShift;
     }
 
-    
     badge.className = "badge";
 
     if (!selectedName) {
@@ -325,6 +325,7 @@ function render(id,date){
         });
     }
 }
+
 
 function autoRefreshData(){
 
