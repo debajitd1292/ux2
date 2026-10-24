@@ -300,16 +300,27 @@ async function renderEcoLeaveCounter() {
     const ecoElement = document.getElementById("totalEcoValue");
     const leaveElement = document.getElementById("totalLeaveValue");
 
+    
     if (ecoElement) {
         ecoElement.textContent = `${ecoTotal} / 26`;
         ecoElement.classList.toggle("eco-over-limit", ecoTotal > 26);
+
+        animateDataOnFirstLoad(
+            ecoElement,
+            `eco-${employee}-${category}-${year}`
+        );
     }
 
     if (leaveElement) {
         leaveElement.textContent = String(leaveTotal);
-    }
-}
 
+    animateDataOnFirstLoad(
+        leaveElement,
+        `leave-${employee}-${category}-${year}`
+        );
+    }
+
+}
 
 
 function renderNext7Days(){
@@ -608,8 +619,17 @@ function setOffDayCounterValue(id, count, limit, complete) {
         return;
     }
 
+    
     element.textContent = `${count} / ${limit}`;
-    element.classList.add(count > limit ? "is-over-limit" : "is-within-limit");
+    element.classList.add(
+        count > limit ? "is-over-limit" : "is-within-limit"
+    );
+
+    animateDataOnFirstLoad(
+        element,
+        `off-${selectedName}-${document.getElementById("categorySelector")?.value || ""}-${new Date().getFullYear()}-${id}`
+    );
+
 }
 
 async function renderOffDayCounter() {
