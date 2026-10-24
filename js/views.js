@@ -154,7 +154,7 @@ let ecoLeaveRenderToken = 0;
 
 function renderEcoLeaveCounterMarkup() {
     return `
-        <div class="eco-leave-heading">ECO &amp; Leaves till date</div>
+        <div class="eco-leave-heading">ECO &amp; Leaves Counter:</div>
         <div class="eco-leave-grid">
             <div class="eco-leave-item eco-card">
                 <span class="eco-leave-label">Total ECO</span>
@@ -212,9 +212,8 @@ async function renderEcoLeaveCounter() {
     for (let monthIndex = 0; monthIndex < currentMonth; monthIndex++) {
         const monthData = monthlyData[monthIndex];
 
-        if (!monthData || !monthData.complete) {
-            complete = false;
-            break;
+        if (!monthData || !monthData.rows || monthData.rows.length < 2) {
+            continue;
         }
 
         const employeeRow = monthData.rows.slice(1).find(row =>
@@ -222,8 +221,7 @@ async function renderEcoLeaveCounter() {
         );
 
         if (!employeeRow) {
-            complete = false;
-            break;
+            continue;
         }
 
         const month = monthIndex + 1;
@@ -233,6 +231,11 @@ async function renderEcoLeaveCounter() {
 
         for (let day = 1; day <= daysToCount; day++) {
             const column = monthData.dayColumns[day - 1];
+
+            if (column == null || column < 0) {
+                 continue;
+            }
+
             const rawShift = String(employeeRow[column] || "")
                 .trim()
                 .toUpperCase();
@@ -296,12 +299,6 @@ async function renderEcoLeaveCounter() {
 
     const ecoElement = document.getElementById("totalEcoValue");
     const leaveElement = document.getElementById("totalLeaveValue");
-
-    if (!complete) {
-        if (ecoElement) ecoElement.textContent = "— / 26";
-        if (leaveElement) leaveElement.textContent = "—";
-        return;
-    }
 
     if (ecoElement) {
         ecoElement.textContent = `${ecoTotal} / 26`;
@@ -585,7 +582,7 @@ function renderOffDayCounterMarkup() {
     `).join("");
 
     return `
-        <div class="off-day-counter-heading">Rest / OFF Counter</div>
+        <div class="off-day-counter-heading">Rest / OFF Counter:</div>
         <div class="off-day-counter-grid">${itemMarkup}</div>
         <div class="off-day-warning" id="offDayGapWarning" hidden>
             ⚠️ More than 10 working days between OFF days in the current month
