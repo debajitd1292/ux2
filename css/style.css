@@ -2449,55 +2449,54 @@ body.dark #productionGradeSince {
 
 
 /* 28. GH / RH HOLIDAY CARDS */
-
-/* COMPACT GH / RH HOLIDAY CARDS */
 .holiday-cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
+    gap: 10px;
     width: auto;
-    margin: 5px 10px;
+    max-width: none;
+    margin: 10px;
     box-sizing: border-box;
 }
 
 .holiday-card {
     min-width: 0;
-    padding: 5px 7px;
-    border: 1px solid #D5E3F2;
-    border-radius: 8px;
-    background: #F4F8FD;
-    color: #173B65;
+    padding: 9px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
     box-sizing: border-box;
 }
 
 .holiday-title {
-    margin-bottom: 1px;
+    margin-bottom: 5px;
     font-size: 11px;
     font-weight: 700;
-    line-height: 1.2;
-    color: #315781;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: #bfdbfe;
 }
 
 .holiday-date {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1.4;
     overflow-wrap: anywhere;
-    color: #1e3a5f;
+    color: #ffffff;
 }
 
 @media (max-width: 380px) {
     .holiday-cards {
-        gap: 5px;
-        margin: 5px 10px;
+        gap: 7px;
     }
 
     .holiday-card {
-        padding: 5px;
+        padding: 8px 5px;
     }
 
     .holiday-date {
-        font-size: 10px;
+        font-size: 12px;
     }
 }
 
@@ -2563,20 +2562,16 @@ body.dark #productionGradeSince {
 }
 
 
-
 #todayReason {
     font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    line-height: 1.2;
-    opacity: 1;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    opacity: 0.85;
     overflow-wrap: anywhere;
     text-align: center;
     margin-top: 1px;
-    color: #315781;
 }
-
 
 #todayShiftBadge {
     align-self: center;
@@ -3410,4 +3405,145 @@ body.dark #page-shifts .leave-card .eco-leave-value {
 
 body.dark #page-shifts .eco-leave-heading {
     color: #dbeafe;
+}
+
+
+/* =========================================================
+   HOME PAGE — COMPACT DATE, HOLIDAY & HOD/AIC SECTIONS
+   ========================================================= */
+
+/* 1. Today's date and holiday name — tighter spacing */
+.today-weather-summary {
+    padding-top: 9px;
+    padding-bottom: 9px;
+    gap: 0;
+}
+
+#todayDate {
+    margin-bottom: 2px;
+    line-height: 1.15;
+}
+
+#todayReason {
+    margin-top: 0 !important;
+    margin-bottom: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    color: #bfdbfe;
+    opacity: 1;
+}
+
+/* Reduce space above the shift badge */
+#todayShiftBadge {
+    margin-top: 4px;
+}
+
+/* 2. Compact Next GH / Next RH cards */
+.holiday-cards {
+    gap: 6px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.holiday-card {
+    padding: 5px 7px;
+}
+
+.holiday-title {
+    margin-bottom: 2px;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.holiday-date,
+.holiday-date-main {
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.holiday-date-main {
+    margin-bottom: 2px;
+}
+
+/* 3. Reduce vertical gaps in HOD / AIC / SIC section */
+.info-bar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.info-row {
+    gap: 1px;
+    min-height: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    line-height: 1.2;
+}
+
+.info-label {
+    line-height: 1.2;
+}
+
+.info-name {
+    line-height: 1.2;
+}
+
+/* Mobile spacing */
+@media (max-width: 600px) {
+    .info-row {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        gap: 6px;
+    }
+}
+
+/* Preserve existing dark-mode appearance */
+body.dark #todayReason {
+    color: #dbeafe;
+}
+
+@media (max-width: 380px) {
+    .today-weather-summary {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .holiday-card {
+        padding: 5px;
+    }
+}
+
+/* Match Next GH / Next RH cards with Today's blue gradient */
+.holiday-card {
+    background: linear-gradient(135deg, #1f4e79 0%, #163a5f 100%);
+    border: 1px solid #315f89;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+/* Holiday card text colours */
+.holiday-title {
+    color: #bfdbfe;
+}
+
+.holiday-date,
+.holiday-date-main,
+.holiday-name {
+    color: #ffffff;
+}
+
+/* Keep the compact layout */
+.holiday-card {
+    padding: 5px 7px;
+}
+
+.holiday-title,
+.holiday-date,
+.holiday-date-main,
+.holiday-name {
+    line-height: 1.2;
 }
